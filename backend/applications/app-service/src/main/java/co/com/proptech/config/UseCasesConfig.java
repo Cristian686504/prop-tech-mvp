@@ -1,14 +1,35 @@
 package co.com.proptech.config;
 
-import org.springframework.context.annotation.ComponentScan;
+import co.com.proptech.model.user.gateways.JwtService;
+import co.com.proptech.model.user.gateways.PasswordEncoder;
+import co.com.proptech.model.user.gateways.UserRepository;
+import co.com.proptech.usecase.user.GetUserByIdUseCase;
+import co.com.proptech.usecase.user.LoginUserUseCase;
+import co.com.proptech.usecase.user.RegisterUserUseCase;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 
 @Configuration
-@ComponentScan(basePackages = "co.com.proptech.usecase",
-        includeFilters = {
-                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "^.+UseCase$")
-        },
-        useDefaultFilters = false)
 public class UseCasesConfig {
+
+    @Bean
+    public RegisterUserUseCase registerUserUseCase(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService) {
+        return new RegisterUserUseCase(userRepository, passwordEncoder, jwtService);
+    }
+
+    @Bean
+    public LoginUserUseCase loginUserUseCase(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService) {
+        return new LoginUserUseCase(userRepository, passwordEncoder, jwtService);
+    }
+
+    @Bean
+    public GetUserByIdUseCase getUserByIdUseCase(UserRepository userRepository) {
+        return new GetUserByIdUseCase(userRepository);
+    }
 }
