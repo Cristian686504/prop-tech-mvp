@@ -1,19 +1,13 @@
--- Create user_role enum
-CREATE TYPE user_role AS ENUM ('LANDLORD', 'TENANT');
-
--- Create document_type enum
-CREATE TYPE document_type AS ENUM ('CC', 'CE', 'NIT', 'PP', 'TI');
-
--- Create users table
+-- Create users table with VARCHAR enums and CHECK constraints
 CREATE TABLE users (
     id UUID PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     phone VARCHAR(50),
-    document_type document_type NOT NULL,
+    document_type VARCHAR(10) NOT NULL CHECK (document_type IN ('CC', 'CE', 'NIT', 'PP', 'TI')),
     document_id VARCHAR(50) NOT NULL,
-    role user_role NOT NULL,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('LANDLORD', 'TENANT')),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
