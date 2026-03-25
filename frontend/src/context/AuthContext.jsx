@@ -25,15 +25,15 @@ export function AuthProvider({ children }) {
   };
 
   const login = async (email, password) => {
-    const response = await api.post('/auth/login', { email, password });
-    setUser(response.user);
-    return response;
+    const userData = await api.post('/auth/login', { email, password });
+    setUser(userData);
+    return userData;
   };
 
   const register = async (userData) => {
-    const response = await api.post('/auth/register', userData);
-    setUser(response.user);
-    return response;
+    const user = await api.post('/auth/register', userData);
+    setUser(user);
+    return user;
   };
 
   const logout = async () => {
