@@ -21,3 +21,5 @@ project(':model').projectDir = file('./domain/model')
 project(':usecase').projectDir = file('./domain/usecase')
 include ':jpa-repository'
 project(':jpa-repository').projectDir = file('./infrastructure/driven-adapters/jpa-repository')
+include ':rest-api'
+project(':rest-api').projectDir = file('./infrastructure/entry-points/rest-api')
