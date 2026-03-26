@@ -1,12 +1,9 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Register from './pages/Register';
+import Login from './pages/Login';
 
 // Placeholder pages - to be implemented
-function LoginPage() {
-  return <div>Login Page - TODO</div>;
-}
-
 function PropertiesPage() {
   return <div>Properties Page - TODO</div>;
 }
@@ -38,7 +35,7 @@ export const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <LoginPage />,
+    element: <Login />,
   },
   {
     path: '/register',
