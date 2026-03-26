@@ -16,10 +16,24 @@ export default function Register() {
     password: '',
     confirmPassword: '',
     phone: '',
+    countryCode: '+57',
     documentType: 'CC',
     documentId: '',
     role: 'TENANT',
   });
+
+  const countryCodes = [
+    { value: '+57', label: '+57 🇨🇴', country: 'Colombia' },
+    { value: '+1', label: '+1 🇺🇸', country: 'USA/Canadá' },
+    { value: '+52', label: '+52 🇲🇽', country: 'México' },
+    { value: '+54', label: '+54 🇦🇷', country: 'Argentina' },
+    { value: '+55', label: '+55 🇧🇷', country: 'Brasil' },
+    { value: '+56', label: '+56 🇨🇱', country: 'Chile' },
+    { value: '+51', label: '+51 🇵🇪', country: 'Perú' },
+    { value: '+593', label: '+593 🇪🇨', country: 'Ecuador' },
+    { value: '+58', label: '+58 🇻🇪', country: 'Venezuela' },
+    { value: '+34', label: '+34 🇪🇸', country: 'España' },
+  ];
 
   const documentTypes = [
     { value: 'CC', label: 'Cédula de Ciudadanía' },
@@ -105,8 +119,12 @@ export default function Register() {
     setLoading(true);
 
     try {
-      // Remove confirmPassword before sending to API
-      const { confirmPassword, ...registerData } = formData;
+      // Remove confirmPassword and combine countryCode with phone before sending to API
+      const { confirmPassword, countryCode, phone, ...rest } = formData;
+      const registerData = {
+        ...rest,
+        phone: `${countryCode}${phone}`,
+      };
       
       await register(registerData);
       navigate('/properties');
@@ -247,18 +265,33 @@ export default function Register() {
 
           <div className="form-group">
             <label htmlFor="phone">Teléfono *</label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              onBlur={() => handleBlur('phone')}
-              placeholder="+573001234567"
-              required
-              disabled={loading}
-              className={getFieldError('phone') ? 'input-error' : ''}
-            />
+            <div className="phone-input-group">
+              <select
+                name="countryCode"
+                value={formData.countryCode}
+                onChange={handleChange}
+                disabled={loading}
+                className="country-code-select"
+              >
+                {countryCodes.map(code => (
+                  <option key={code.value} value={code.value}>
+                    {code.label}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                onBlur={() => handleBlur('phone')}
+                placeholder="3001234567"
+                required
+                disabled={loading}
+                className={getFieldError('phone') ? 'input-error' : ''}
+              />
+            </div>
             {getFieldError('phone') && <span className="field-error">{getFieldError('phone')}</span>}
           </div>
 
