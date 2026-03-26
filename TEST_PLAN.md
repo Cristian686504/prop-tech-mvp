@@ -136,6 +136,13 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 6. **Regresión:** Al final de cada sprint se ejecuta el suite completo de pruebas automatizadas para garantizar que no se introdujeron regresiones.
 7. **Reporte de defectos:** Los defectos encontrados se registran en el Bug Tracker (GitHub Issues) con severidad, pasos de reproducción y evidencia. Se notifica al equipo DEV para corrección y se valida en un ciclo 2 de ejecución.
 
+### 4.3 Estrategia de datos
+
+- Para las pruebas de API con Karate se utilizarán payloads JSON definidos en archivos `.json` dentro del proyecto de pruebas.
+- La base de datos de pruebas se reiniciará antes de cada ciclo de ejecución para garantizar un estado limpio y reproducible.
+- Se prepararán sets de datos específicos para escenarios negativos (correos duplicados, campos vacíos, datos inválidos).
+- Para las pruebas de rendimiento con k6, los payloads de registro serán generados dinámicamente con **@faker-js/faker** durante la ejecución del script, garantizando unicidad de correos entre VUs y evitando colisiones de datos en la base de datos bajo carga concurrente.
+
 ---
 
 ## 5. Criterios de Entrada y Salida
@@ -199,6 +206,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | **Karate DSL** | 1.5.2 | Pruebas exclusivas de API REST — validación de contratos de API: códigos HTTP, estructura JSON y schemas |
 | **k6** | 1.6.1 | Pruebas de rendimiento — carga, estrés y umbrales de latencia |
 | **JUnit 5 / Mockito** | 5.13.4 / 5.23.0 | Pruebas unitarias (responsabilidad DEV) |
+| **@faker-js/faker** | 1.0.2 | Generación de datos de prueba aleatorios |
 | **GitHub Issues** | — | Bug Tracker — registro y seguimiento de defectos |
 | **GitHub Actions** | — | CI/CD — ejecución automática de suites de prueba |
 | **Postman** | 12.3.0 | Exploración y pruebas manuales |
@@ -263,8 +271,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | 6 | Reporte SerenityBDD | HTML generado | Reporte detallado de ejecución de pruebas funcionales con evidencias |
 | 7 | Reporte k6 | HTML / JSON | Reporte de métricas de rendimiento (latencia p95, throughput, tasa de error) |
 | 8 | Registro de defectos | GitHub Issues | Defectos encontrados con severidad, pasos de reproducción y evidencia |
-| 9 | Matriz de trazabilidad | Sección en `TEST_CASES.md` | Mapeo HU → CA → Caso de prueba → Resultado |
-| 10 | Informe final de pruebas | Markdown / PDF | Resumen ejecutivo del ciclo: cobertura, métricas, defectos y recomendaciones |
+| 9 | Informe final de pruebas | Markdown / PDF | Resumen ejecutivo del ciclo: cobertura, métricas, defectos y recomendaciones |
 
 ---
 
