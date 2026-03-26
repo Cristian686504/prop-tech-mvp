@@ -2,15 +2,8 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Register from './pages/Register';
 import Login from './pages/Login';
-
-// Placeholder pages - to be implemented
-function PropertiesPage() {
-  return <div>Properties Page - TODO</div>;
-}
-
-function PublishPropertyPage() {
-  return <div>Publish Property Page - TODO</div>;
-}
+import PropertyList from './pages/PropertyList';
+import PublishProperty from './pages/PublishProperty';
 
 // Protected route wrapper
 function ProtectedRoute({ children }) {
@@ -45,15 +38,15 @@ export const router = createBrowserRouter([
     path: '/properties',
     element: (
       <ProtectedRoute>
-        <PropertiesPage />
+        <PropertyList />
       </ProtectedRoute>
     ),
   },
   {
-    path: '/publish',
+    path: '/publish-property',
     element: (
       <ProtectedRoute>
-        <PublishPropertyPage />
+        <PublishProperty />
       </ProtectedRoute>
     ),
   },
