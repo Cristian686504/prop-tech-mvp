@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import propertyService from '../services/propertyService';
 import PropertyCard from '../components/PropertyCard';
+import Navbar from '../components/Navbar';
 import './PropertyList.css';
 
 function PropertyList() {
@@ -31,7 +32,9 @@ function PropertyList() {
   };
 
   return (
-    <div className="property-list-container">
+    <>
+      <Navbar />
+      <div className="property-list-container">
       <div className="property-list-header">
         <div className="header-content">
           <h1>Propiedades Disponibles</h1>
@@ -94,6 +97,7 @@ function PropertyList() {
         </div>
       )}
     </div>
+    </>
   );
 }
 
