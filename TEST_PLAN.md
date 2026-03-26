@@ -246,21 +246,6 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 
 ## 9. Cronograma y Estimación
 
-### 9.1 Esfuerzo de QA por HU
-
-| HU | Tareas de QA | Esfuerzo QA estimado (días) | Actividades QA |
-|----|:--------------------:|:---------------------------:|----------------|
-| HU001 | 7 (TQA001–TQA007) | 0.5 | Diseño de casos, automatización Karate + Cucumber, ejecución |
-| HU002 | 7 (TQA008–TQA014) | 0.5 | Diseño de casos, automatización Karate + Cucumber, ejecución |
-| HU003 | 6 (TQA015–TQA020) | 2.0 | Diseño de casos, automatización Karate + Cucumber, pruebas JWT, ejecución |
-| HU004 | 5 (TQA022–TQA026) | 2.0 | Diseño de casos, automatización Karate + Cucumber, E2E, ejecución + prueba manual imágenes > 250 MB (Postman + evidencia) |
-| HU005 | 2 (TQA027–TQA028) | 0.5 | Diseño de casos, automatización Karate + Cucumber, paginación, ejecución |
-| **Regresión** | Suite completo | 1.0 | Ejecución del suite completo automatizado |
-| **Rendimiento (k6)** | 4 scripts | 1.0 | Creación y ejecución de scripts k6 |
-| **TOTAL** | **27 + regresión + rendimiento** | **7.5** | |
-
-### 9.2 Cronograma
-
 | Sprint | Actividad | Duración estimada |
 |------|-----------|:-----------------:|
 | Micro-Sprint 1 (2 días) | Diseño del plan de pruebas | 2 días |
