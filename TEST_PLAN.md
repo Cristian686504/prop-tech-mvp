@@ -132,7 +132,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 2. **Pruebas funcionales API (Karate):** Ejecutar los escenarios de cada endpoint individualmente validando contratos de API (códigos HTTP, estructura JSON y schemas de respuesta). Karate se usa exclusivamente para la capa de API.
 3. **Pruebas funcionales E2E (SerenityBDD + Cucumber):** Ejecutar los escenarios Gherkin que validan flujos de negocio de extremo a extremo sobre los criterios de aceptación de cada HU. SerenityBDD se usa exclusivamente para flujos E2E.
 4. **Pruebas manuales:** Ejecutar los escenarios marcados como "Manual" en la matriz de criterios de aceptación. El QA documenta evidencia con capturas de pantalla y resultado en el reporte.
-5. **Pruebas de rendimiento (k6):** Ejecutar scripts de carga sobre los endpoints `POST api/auth/register`, `POST api/auth/login`, `POST /api/properties` y `GET /api/properties`.
+5. **Pruebas de rendimiento (k6):** Ejecutar scripts de carga sobre los endpoints `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/properties` y `GET /api/properties`.
 6. **Regresión:** Al final de cada sprint se ejecuta el suite completo de pruebas automatizadas para garantizar que no se introdujeron regresiones.
 7. **Reporte de defectos:** Los defectos encontrados se registran en el Bug Tracker (GitHub Issues) con severidad, pasos de reproducción y evidencia. Se notifica al equipo DEV para corrección y se valida en un ciclo 2 de ejecución.
 
@@ -236,9 +236,9 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 
 | HU | Tareas DEV-F (Funcional) | Tareas DEV-NF (No Funcional) |
 |----|--------------------------|------------------------------|
-| HU001 | TD001: Verificar/Crear tabla usuarios en BD (id, nombre, correo, contraseña hash, teléfono, rol, fecha de creación) · TD002: Crear modelo/entidad Usuario y DTOs · TD003: Implementar endpoint `POST api/auth/register` · TD004: Validaciones funcionales (correo ya registrado, asignación de rol arrendador) | TD005: Validaciones de entrada (formato correo, longitud mínima contraseña, formato teléfono, campos requeridos) · TD006: Manejo de errores HTTP y mensajes claros · TD007: Hashing de contraseña (bcrypt/argon2) |
-| HU002 | TD008: Verificar/Crear tabla usuarios (reutiliza con HU001) · TD009: Verificar modelo/entidad Usuario y DTOs · TD010: Implementar endpoint `POST api/auth/register` (reutiliza con HU001, asignación de rol arrendatario) · TD011: Validaciones funcionales (correo ya registrado, asignación de rol arrendatario) | TD012: Validaciones de entrada (formato correo, longitud mínima contraseña, formato teléfono, campos requeridos) · TD013: Manejo de errores HTTP y mensajes claros · TD014: Hashing de contraseña |
-| HU003 | TD015: Implementar endpoint `POST api/auth/login` con validación de credenciales · TD017: Implementar redirección con datos de usuario y rol | TD016: Generación de token JWT · TD018: Manejo de errores HTTP y mensajes claros · TD019: Comparación de contraseñas con hashing |
+| HU001 | TD001: Verificar/Crear tabla usuarios en BD (id, nombre, correo, contraseña hash, teléfono, rol, fecha de creación) · TD002: Crear modelo/entidad Usuario y DTOs · TD003: Implementar endpoint `POST /api/auth/register` · TD004: Validaciones funcionales (correo ya registrado, asignación de rol arrendador) | TD005: Validaciones de entrada (formato correo, longitud mínima contraseña, formato teléfono, campos requeridos) · TD006: Manejo de errores HTTP y mensajes claros · TD007: Hashing de contraseña (bcrypt/argon2) |
+| HU002 | TD008: Verificar/Crear tabla usuarios (reutiliza con HU001) · TD009: Verificar modelo/entidad Usuario y DTOs · TD010: Implementar endpoint `POST /api/auth/register` (reutiliza con HU001, asignación de rol arrendatario) · TD011: Validaciones funcionales (correo ya registrado, asignación de rol arrendatario) | TD012: Validaciones de entrada (formato correo, longitud mínima contraseña, formato teléfono, campos requeridos) · TD013: Manejo de errores HTTP y mensajes claros · TD014: Hashing de contraseña |
+| HU003 | TD015: Implementar endpoint `POST /api/auth/login` con validación de credenciales · TD017: Implementar redirección con datos de usuario y rol | TD016: Generación de token JWT · TD018: Manejo de errores HTTP y mensajes claros · TD019: Comparación de contraseñas con hashing |
 | HU004 | TD020: Crear tabla propiedades en BD (id, titulo, direccion, descripcion, precio_alquiler, imagenes, fecha_publicacion, arrendador_id, fecha_actualizacion) · TD021: Crear modelo/entidad Propiedad y DTOs · TD022: Implementar endpoint `POST /api/properties` (solo accesible por arrendadores) | TD023: Validaciones de entrada (formato de datos, campos requeridos, límites de caracteres) · TD024: Manejo de errores HTTP y mensajes claros |
 | HU005 | TD025: Implementar endpoint `GET /api/properties` para listar propiedades disponibles · TD026: Componente frontend para mostrar lista de propiedades con detalles | TD027: Manejo de errores HTTP y mensajes claros · TD028: Implementar paginación |
 
@@ -252,9 +252,9 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 |----|:--------------------:|:---------------------------:|----------------|
 | HU001 | 7 (TQA001–TQA007) | 0.5 | Diseño de casos, automatización Karate + Cucumber, ejecución |
 | HU002 | 7 (TQA008–TQA014) | 0.5 | Diseño de casos, automatización Karate + Cucumber, ejecución |
-| HU003 | 6 (TQA015–TQA020) | 1.5 | Diseño de casos, automatización Karate + Cucumber, pruebas JWT, ejecución |
+| HU003 | 6 (TQA015–TQA020) | 2.0 | Diseño de casos, automatización Karate + Cucumber, pruebas JWT, ejecución |
 | HU004 | 5 (TQA022–TQA026) | 1.5 | Diseño de casos, automatización Karate + Cucumber, E2E, ejecución |
-| HU005 | 2 (TQA027–TQA028) | 1.0 | Diseño de casos, automatización Karate + Cucumber, paginación, ejecución |
+| HU005 | 2 (TQA027–TQA028) | 0.5 | Diseño de casos, automatización Karate + Cucumber, paginación, ejecución |
 | **Regresión** | Suite completo | 1.0 | Ejecución del suite completo automatizado |
 | **Rendimiento (k6)** | 4 scripts | 1.0 | Creación y ejecución de scripts k6 |
 | **TOTAL** | **27 + regresión + rendimiento** | **7.0** | |
@@ -263,13 +263,13 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 
 | Sprint | Actividad | Duración estimada |
 |------|-----------|:-----------------:|
-| Micro-Sprint 1 (2 días) | Diseño del plan de pruebas | 2 día |
+| Micro-Sprint 1 (2 días) | Diseño del plan de pruebas | 2 días |
 | Micro-Sprint 2 (2 días) | Diseño de casos de prueba (todas las HU) | 2 días |
-| Sprint 3 | Automatización HU001 + HU002 (Karate + Cucumber) | 1 días |
-| Sprint 3 | Automatización HU003 (Karate + Cucumber + JWT) | 2 días |
-| Sprint 3 | Automatización HU004 + HU005 (Karate + Cucumber + E2E) | 2 días |
-| Sprint 3 | Pruebas de rendimiento k6 | 1 día |
-| Sprint 3 | Regresión + reporte final | 1 día |
+| Sprint 1 | Automatización HU001 + HU002 (Karate + Cucumber) | 1 día |
+| Sprint 1 | Automatización HU003 (Karate + Cucumber + JWT) | 2 días |
+| Sprint 1 | Automatización HU004 + HU005 (Karate + Cucumber + E2E) | 2 días |
+| Sprint 1 | Pruebas de rendimiento k6 | 1 día |
+| Sprint 1 | Regresión + reporte final | 1 día |
 | **TOTAL** | | **11 días** |
 
 ---
