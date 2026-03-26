@@ -1,0 +1,31 @@
+# Gradle
+.gradle/
+build/
+!gradle-wrapper.jar
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test reports
+**/test-results/
+**/reports/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Build cache
+build-cache/
