@@ -5,6 +5,7 @@ dependencies {
 
 	implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
 	implementation project(':jpa-repository')
+	implementation project(':file-storage')
 	implementation project(':rest-api')
     implementation project(':model')
     implementation project(':usecase')
