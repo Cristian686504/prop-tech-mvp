@@ -253,11 +253,11 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | HU001 | 7 (TQA001–TQA007) | 0.5 | Diseño de casos, automatización Karate + Cucumber, ejecución |
 | HU002 | 7 (TQA008–TQA014) | 0.5 | Diseño de casos, automatización Karate + Cucumber, ejecución |
 | HU003 | 6 (TQA015–TQA020) | 2.0 | Diseño de casos, automatización Karate + Cucumber, pruebas JWT, ejecución |
-| HU004 | 5 (TQA022–TQA026) | 1.5 | Diseño de casos, automatización Karate + Cucumber, E2E, ejecución |
+| HU004 | 5 (TQA022–TQA026) | 2.0 | Diseño de casos, automatización Karate + Cucumber, E2E, ejecución + prueba manual imágenes > 250 MB (Postman + evidencia) |
 | HU005 | 2 (TQA027–TQA028) | 0.5 | Diseño de casos, automatización Karate + Cucumber, paginación, ejecución |
 | **Regresión** | Suite completo | 1.0 | Ejecución del suite completo automatizado |
 | **Rendimiento (k6)** | 4 scripts | 1.0 | Creación y ejecución de scripts k6 |
-| **TOTAL** | **27 + regresión + rendimiento** | **7.0** | |
+| **TOTAL** | **27 + regresión + rendimiento** | **7.5** | |
 
 ### 9.2 Cronograma
 
@@ -267,10 +267,10 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | Micro-Sprint 2 (2 días) | Diseño de casos de prueba (todas las HU) | 2 días |
 | Sprint 1 | Automatización HU001 + HU002 (Karate + Cucumber) | 1 día |
 | Sprint 1 | Automatización HU003 (Karate + Cucumber + JWT) | 2 días |
-| Sprint 1 | Automatización HU004 + HU005 (Karate + Cucumber + E2E) | 2 días |
+| Sprint 1 | Automatización HU004 + HU005 (Karate + Cucumber + E2E + prueba manual) | 2.5 días |
 | Sprint 1 | Pruebas de rendimiento k6 | 1 día |
 | Sprint 1 | Regresión + reporte final | 1 día |
-| **TOTAL** | | **11 días** |
+| **TOTAL** | | **11.5 días** |
 
 ---
 
