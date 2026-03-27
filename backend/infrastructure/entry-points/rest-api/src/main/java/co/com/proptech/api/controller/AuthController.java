@@ -104,6 +104,8 @@ public class AuthController {
                 .documentType(user.getDocumentType())
                 .documentId(user.getDocumentId())
                 .role(user.getRole())
+                .monthlyIncome(user.getMonthlyIncome())
+                .creditScore(user.getCreditScore())
                 .createdAt(user.getCreatedAt())
                 .build();
     }
