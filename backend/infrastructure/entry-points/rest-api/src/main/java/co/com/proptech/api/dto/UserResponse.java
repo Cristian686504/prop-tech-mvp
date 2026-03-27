@@ -5,6 +5,7 @@ import co.com.proptech.model.user.enums.UserRole;
 import lombok.Builder;
 import lombok.Value;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -18,5 +19,7 @@ public class UserResponse {
     DocumentType documentType;
     String documentId;
     UserRole role;
+    BigDecimal monthlyIncome;
+    Integer creditScore;
     LocalDateTime createdAt;
 }
