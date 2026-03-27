@@ -49,6 +49,8 @@ public class UserRepositoryAdapter implements UserRepository {
                 .documentType(user.getDocumentType())
                 .documentId(user.getDocumentId())
                 .role(user.getRole())
+                .monthlyIncome(user.getMonthlyIncome())
+                .creditScore(user.getCreditScore())
                 .createdAt(user.getCreatedAt())
                 .build();
     }
@@ -63,6 +65,8 @@ public class UserRepositoryAdapter implements UserRepository {
                 .documentType(entity.getDocumentType())
                 .documentId(entity.getDocumentId())
                 .role(entity.getRole())
+                .monthlyIncome(entity.getMonthlyIncome())
+                .creditScore(entity.getCreditScore())
                 .createdAt(entity.getCreatedAt())
                 .build();
     }

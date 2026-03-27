@@ -56,7 +56,7 @@ public class PropertyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PropertyResponse> getPropertyById(@PathVariable UUID id) {
+    public ResponseEntity<PropertyResponse> getPropertyById(@PathVariable("id") UUID id) {
         Property property = getPropertyByIdUseCase.execute(id);
         return ResponseEntity.ok(mapToResponse(property));
     }
