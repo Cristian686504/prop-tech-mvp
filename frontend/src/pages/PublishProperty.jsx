@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import propertyService from '../services/propertyService';
+import Navbar from '../components/Navbar';
 import './PublishProperty.css';
 
 function PublishProperty() {
@@ -155,8 +156,10 @@ function PublishProperty() {
   };
 
   return (
-    <div className="publish-container">
-      <div className="publish-content">
+    <>
+      <Navbar />
+      <div className="publish-container">
+        <div className="publish-content">
         <div className="publish-header">
           <button onClick={() => navigate('/properties')} className="back-button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -311,6 +314,7 @@ function PublishProperty() {
         </form>
       </div>
     </div>
+    </>
   );
 }
 

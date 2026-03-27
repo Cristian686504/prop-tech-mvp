@@ -1,9 +1,12 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import PropertyList from './pages/PropertyList';
 import PublishProperty from './pages/PublishProperty';
+import MyApplications from './pages/MyApplications';
+import PropertyApplications from './pages/PropertyApplications';
 
 // Protected route wrapper
 function ProtectedRoute({ children }) {
@@ -24,7 +27,7 @@ function ProtectedRoute({ children }) {
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to="/properties" replace />,
+    element: <Home />,
   },
   {
     path: '/login',
@@ -47,6 +50,22 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <PublishProperty />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/my-applications',
+    element: (
+      <ProtectedRoute>
+        <MyApplications />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/property-applications',
+    element: (
+      <ProtectedRoute>
+        <PropertyApplications />
       </ProtectedRoute>
     ),
   },

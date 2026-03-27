@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -45,6 +46,13 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 20)
     private UserRole role;
+
+    // Financial profile - only populated for TENANT role
+    @Column(name = "monthly_income", precision = 19, scale = 2)
+    private BigDecimal monthlyIncome;
+
+    @Column(name = "credit_score")
+    private Integer creditScore;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

@@ -1,6 +1,7 @@
 package co.com.proptech.usecase.user;
 
 import co.com.proptech.model.user.User;
+import co.com.proptech.model.user.enums.UserRole;
 import co.com.proptech.model.user.gateways.JwtService;
 import co.com.proptech.model.user.gateways.PasswordEncoder;
 import co.com.proptech.model.user.gateways.UserRepository;
@@ -8,7 +9,9 @@ import co.com.proptech.usecase.user.dto.AuthResponse;
 import co.com.proptech.usecase.user.dto.RegisterUserRequest;
 import lombok.RequiredArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Random;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -36,6 +39,18 @@ public class RegisterUserUseCase {
                 .role(request.getRole())
                 .createdAt(LocalDateTime.now())
                 .build();
+        
+        // Generate simulated financial data for TENANT
+        if (request.getRole() == UserRole.TENANT) {
+            Random random = new Random();
+            // Monthly income: 2M - 8M COP
+            int income = 2_000_000 + random.nextInt(6_000_000);
+            user.setMonthlyIncome(BigDecimal.valueOf(income));
+            
+            // Credit score: 400-800
+            int score = 400 + random.nextInt(401);
+            user.setCreditScore(score);
+        }
 
         User savedUser = userRepository.save(user);
 
