@@ -17,15 +17,20 @@ WORKDIR /app
 # Copy the executable JAR
 COPY --from=build /app/applications/app-service/build/libs/proptech.jar proptech.jar
 
-# Create cache directory and set permissions
-RUN mkdir -p /cache && chown -R appuser:appgroup /app /cache
+# Create uploads and cache directories with proper permissions
+RUN mkdir -p /app/uploads /cache && chown -R appuser:appgroup /app /cache
+
+# Install su-exec for better user switching
+RUN apk add --no-cache su-exec
+
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # JVM optimization flags
 ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=70 -Djava.security.egd=file:/dev/./urandom"
 
-# Switch to non-root user
-USER appuser
-
 EXPOSE 8080
 
-ENTRYPOINT ["/bin/sh", "-c", "java $JAVA_OPTS -jar /app/proptech.jar"]
+# Run as root in entrypoint, then switch to appuser
+ENTRYPOINT ["docker-entrypoint.sh"]

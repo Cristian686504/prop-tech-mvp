@@ -37,9 +37,6 @@ subprojects {
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
-
-    test.finalizedBy(project.tasks.jacocoTestReport)
-
     pitest {
         targetClasses = ['co.com.proptech.*']
         excludedClasses = []
@@ -68,6 +65,34 @@ subprojects {
             html.setOutputLocation layout.buildDirectory.dir("reports/jacocoHtml")
         }
     }
+
+    tasks.register('showCoverage') {
+        dependsOn jacocoTestReport
+        doLast {
+            def report = file("${buildDir}/reports/jacoco.xml")
+            if (report.exists()) {
+                logger.lifecycle('\n' + '='.multiply(80))
+                logger.lifecycle('JaCoCo Coverage Report - ' + project.name)
+                logger.lifecycle('='.multiply(80))
+                def parser = new XmlSlurper()
+                parser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
+                parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+                def xml = parser.parse(report)
+                def counters = xml.counter
+                counters.each { counter ->
+                    def type = counter.@type.text()
+                    def missed = counter.@missed.text() as Integer
+                    def covered = counter.@covered.text() as Integer
+                    def total = missed + covered
+                    def percentage = total > 0 ? String.format('%.2f', (covered * 100.0 / total)) : '0.00'
+                    logger.lifecycle(String.format('%-20s: %s%% (%d/%d)', type, percentage, covered, total))
+                }
+                logger.lifecycle('='.multiply(80) + '\n')
+            }
+        }
+    }
+
+    test.finalizedBy(showCoverage)
 
 }
 

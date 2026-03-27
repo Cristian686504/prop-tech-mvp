@@ -33,6 +33,8 @@ services:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-default}
     ports:
       - "8080:8080"
+    volumes:
+      - uploads_data:/app/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -56,6 +58,8 @@ services:
 volumes:
   postgres_data:
     name: proptech_postgres_data
+  uploads_data:
+    name: proptech_uploads_data
 
 networks:
   proptech-network:

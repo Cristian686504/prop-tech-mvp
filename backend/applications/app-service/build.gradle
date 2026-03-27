@@ -2,6 +2,7 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
 	testImplementation 'tools.jackson.core:jackson-databind'
+	testImplementation 'com.fasterxml.jackson.core:jackson-databind'
 
 	implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
 	implementation project(':jpa-repository')
@@ -26,7 +27,7 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
     
     // Development
-    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    developmentOnly('org.springframework.boot:spring-boot-devtools')
     
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
