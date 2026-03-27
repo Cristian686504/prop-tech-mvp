@@ -25,7 +25,7 @@
   text-decoration: none;
   font-size: 1.5rem;
   font-weight: 800;
-  color: #0f4c81;
+  color: #2563eb;
   transition: opacity 0.2s;
 }
 
@@ -56,8 +56,8 @@
 }
 
 .nav-link:hover {
-  background: #f1f5f9;
-  color: #0f4c81;
+  background: #eff6ff;
+  color: #2563eb;
 }
 
 .navbar-divider {
@@ -86,7 +86,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0f4c81 0%, #1e3a5f 100%);
+  background: #2563eb;
   color: white;
   display: flex;
   align-items: center;
@@ -119,24 +119,19 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
-  background: transparent;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 8px;
+  background: white;
+  border: none;
+  border-radius: 0.5rem;
   color: #64748b;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .logout-button:hover {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #dc2626;
-}
-
-.logout-button svg {
-  stroke-width: 2;
+  color: #1e293b;
+  background: #f1f5f9;
 }
 
 /* Responsive Design */

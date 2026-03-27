@@ -66,6 +66,19 @@ const propertyService = {
     const data = await response.json();
     return data.url;
   },
+
+  // Get applications for a property (LANDLORD only)
+  async getPropertyApplications(propertyId) {
+    const response = await fetch(`${API_URL}/applications/property/${propertyId}`, {
+      credentials: 'include',
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch property applications');
+    }
+    
+    return response.json();
+  },
 };
 
 export default propertyService;
