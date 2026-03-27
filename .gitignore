@@ -1,0 +1,36 @@
+# Environment variables
+.env
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build outputs
+backend/build/
+backend/.gradle/
+backend/build-cache/
+frontend/dist/
+frontend/build/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+backend/**/*.log
+frontend/**/*.log
+
+# Test reports
+backend/**/test-results/
+backend/**/reports/
+
+# Docker
+.dockerignore

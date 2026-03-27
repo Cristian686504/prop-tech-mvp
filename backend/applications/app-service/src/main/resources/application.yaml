@@ -1,0 +1,43 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: proptech
+  devtools:
+    add-properties: false
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/proptech}
+    username: ${DATABASE_USER:proptech}
+    password: ${DATABASE_PASSWORD:proptech}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 5MB
+  profiles:
+    include: null
+jwt:
+  secret: "${JWT_SECRET}"
+  expiration: 86400000
+
+file:
+  upload-dir: uploads/properties
+  base-url: ${FILE_BASE_URL:http://localhost:8080}
+
+logging:
+  level:
+    co.com.proptech: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
