@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react';
 import { api } from '../api/client';
 
@@ -17,7 +18,7 @@ export function AuthProvider({ children }) {
       // Call a /me or /whoami endpoint to verify cookie session
       const userData = await api.get('/auth/me');
       setUser(userData);
-    } catch (error) {
+    } catch {
       setUser(null);
     } finally {
       setLoading(false);
@@ -63,3 +64,5 @@ export function useAuth() {
   }
   return context;
 }
+
+export { AuthContext };
