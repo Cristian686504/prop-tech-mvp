@@ -13,7 +13,7 @@ permissions:
 
 env:
   JAVA_VERSION: '17'
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'
   POSTGRES_DB: proptech_test
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
