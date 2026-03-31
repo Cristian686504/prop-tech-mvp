@@ -1,6 +1,7 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+	testImplementation 'tools.jackson.core:jackson-databind'
 	testImplementation 'com.fasterxml.jackson.core:jackson-databind'
 
 	implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
