@@ -10,7 +10,7 @@
 | **Sistema bajo prueba** | Plataforma de Arrendamiento Inteligente |
 | **Versión** | 1.0.0-MVP |
 | **Fecha** | 24 de marzo de 2026 |
-| **Ciclo de pruebas** | Sprint 1 — HU001 a HU005 |
+| **Ciclo de pruebas** | Sprint 1 y Sprint 2 — HU001 a HU010 |
 | **Equipo** | Cristian Renz y Cristian Davila |
 
 ---
@@ -46,8 +46,12 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | EP01 — Gestión de Usuarios | HU003 | Inicio de Sesión | 5 | Alta |
 | EP02 — Gestión de Propiedades | HU004 | Publicar Propiedad | 5 | Alta |
 | EP02 — Gestión de Propiedades | HU005 | Visualizar Propiedades Disponibles | 2 | Media |
+| EP02 — Gestión de Propiedades | HU006 | Aplicar para Alquilar Propiedad | 3 | Alta |
+| EP03 — Evaluación Financiera y Contratación | HU007 | Evaluar Perfil Financiero del Arrendatario | 2 | Alta |
+| EP03 — Evaluación Financiera y Contratación | HU008 | Cálculo Dinámico del Depósito de Garantía | 2 | Alta |
+| EP03 — Evaluación Financiera y Contratación | HU010 | Gestionar Solicitudes de Alquiler | 5 | Alta |
 
-**Total Story Points en alcance:** 18
+**Total Story Points en alcance:** 30
 
 ### 3.2 Criterios de aceptación a validar
 
@@ -92,14 +96,47 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | CA002 | No hay propiedades disponibles | Automatizada |
 | CA003 | Usuario no autenticado quiere ver propiedades | Automatizada |
 
+#### HU006 — Aplicar para Alquilar Propiedad (3 CA)
+| CA | Escenario | Tipo de ejecución |
+|----|-----------|:-----------------:|
+| CA001 | Aplicación exitosa para alquilar propiedad | Automatizada |
+| CA002 | El usuario envía la solicitud a una propiedad no disponible | Automatizada |
+| CA003 | Un usuario no autenticado envía la solicitud a una propiedad | Automatizada |
+
+#### HU007 — Evaluar Perfil Financiero del Arrendatario (8 CA)
+| CA | Escenario | Tipo de ejecución |
+|----|-----------|:-----------------:|
+| CA001 | Perfil financiero con riesgo bajo (Score ≥ 700, Ingreso ≥ 2x) | Automatizada |
+| CA002 | Perfil financiero con riesgo bajo (Score ≥ 500 y < 700, Ingreso ≥ 3x) | Automatizada |
+| CA003 | Perfil financiero con riesgo medio (Score ≥ 700, Ingreso < 2x) | Automatizada |
+| CA004 | Perfil financiero con riesgo medio (Score ≥ 500 y < 700, Ingreso ≥ 2x y < 3x) | Automatizada |
+| CA005 | Perfil financiero con riesgo medio (Score ≥ 500 y < 700, Ingreso ≥ 2x y < 3x) | Automatizada |
+| CA006 | Perfil financiero con riesgo medio (Score < 500, Ingreso ≥ 3x) | Automatizada |
+| CA007 | Perfil financiero con riesgo alto (Score ≥ 500 y < 700, Ingreso < 2x) | Automatizada |
+| CA008 | Perfil financiero con riesgo alto (Score < 500, Ingreso < 3x) | Automatizada |
+
+#### HU008 — Cálculo Dinámico del Depósito de Garantía (3 CA)
+| CA | Escenario | Tipo de ejecución |
+|----|-----------|:-----------------:|
+| CA001 | Cálculo de depósito de garantía para perfil de riesgo bajo (1 mes) | Automatizada |
+| CA002 | Cálculo de depósito de garantía para perfil de riesgo medio (2 meses) | Automatizada |
+| CA003 | Cálculo de depósito de garantía para perfil de riesgo alto (3 meses) | Automatizada |
+
+
+#### HU010 — Gestionar Solicitudes de Alquiler (6 CA)
+| CA | Escenario | Tipo de ejecución |
+|----|-----------|:-----------------:|
+| CA001 | Visualización de solicitudes con evaluación financiera | Automatizada |
+| CA002 | Aprobación de solicitud de alquiler | Automatizada |
+| CA003 | Rechazo de solicitud de alquiler | Automatizada |
+| CA004 | No hay solicitudes pendientes | Automatizada |
+| CA005 | Usuario no autenticado intenta gestionar solicitudes | Automatizada |
+| CA006 | Usuario con rol distinto a arrendador intenta gestionar solicitudes | Automatizada |
+
 ### 3.3 Fuera del alcance (este ciclo)
 
 | HU | Nombre | Razón |
 |----|--------|-------|
-| HU006 | Aplicar para Alquilar Propiedad | Planificada para Sprint 2 |
-| HU007 | Evaluar Perfil Financiero del Arrendatario | Planificada para Sprint 2 |
-| HU008 | Cálculo Dinámico del Depósito de Garantía | Planificada para Sprint 2 |
-| HU009 | Generación de Contrato de Arrendamiento | Planificada para Sprint 2 |
 | — | Firma digital de contrato | Fuera del alcance del MVP |
 | — | Gestión de pagos de alquiler | Fuera del alcance del MVP |
 | — | Usuario administrador | Fuera del alcance del MVP |
@@ -107,10 +144,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | — | Notificaciones | Fuera del alcance del MVP |
 | — | Soporte a clientes | Fuera del alcance del MVP |
 | — | Filtro de propiedades | Fuera del alcance del MVP |
-| — | Pruebas de seguridad (inyección SQL, XSS, manipulación JWT, hashing de contraseñas) | Fuera del alcance del Sprint 1 — se abordarán en un ciclo dedicado de seguridad |
-| — | Condiciones de carrera en alquiler simultáneo de propiedades | Funcionalidad de contratos planificada para Sprint 2 |
-| — | Acceso a contratos por URL sin verificar sesión | Funcionalidad de contratos planificada para Sprint 2 |
-| — | Integración con permisos bancarios | Integración bancaria fuera del alcance del Sprint 1 |
+| — | Pruebas de seguridad (inyección SQL, XSS, manipulación JWT, hashing de contraseñas) | Se abordarán en un ciclo dedicado de seguridad |
 
 ---
 
@@ -132,7 +166,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 2. **Pruebas funcionales API (Karate):** Ejecutar los escenarios de cada endpoint individualmente validando contratos de API (códigos HTTP, estructura JSON y schemas de respuesta). Karate se usa exclusivamente para la capa de API.
 3. **Pruebas funcionales E2E (SerenityBDD + Cucumber):** Ejecutar los escenarios Gherkin que validan flujos de negocio de extremo a extremo sobre los criterios de aceptación de cada HU. SerenityBDD se usa exclusivamente para flujos E2E.
 4. **Pruebas manuales:** Ejecutar los escenarios marcados como "Manual" en la matriz de criterios de aceptación. El QA documenta evidencia con capturas de pantalla y resultado en el reporte.
-5. **Pruebas de rendimiento (k6):** Ejecutar scripts de carga sobre los endpoints `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/properties` y `GET /api/properties`.
+5. **Pruebas de rendimiento (k6):** Ejecutar scripts de carga sobre los endpoints `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/properties`, `GET /api/properties`, `POST /api/applications` y `GET /api/applications`.
 6. **Regresión:** Al final de cada sprint se ejecuta el suite completo de pruebas automatizadas para garantizar que no se introdujeron regresiones.
 7. **Reporte de defectos:** Los defectos encontrados se registran en el Bug Tracker (GitHub Issues) con severidad, pasos de reproducción y evidencia. Se notifica al equipo DEV para corrección y se valida en un ciclo 2 de ejecución.
 
@@ -231,6 +265,11 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | HU003 | TQA015–TQA020: Verificar login con credenciales válidas/inválidas, generación y validación de JWT, redirecciones, campos vacíos |
 | HU004 | TQA022–TQA026: Verificar acceso exclusivo por arrendador, creación de propiedad, restricciones de datos, campos vacíos, códigos de error |
 | HU005 | TQA027–TQA028: Verificar listado de propiedades disponibles con paginación |
+| HU006 | TQA029–TQA033: Verificar aplicación exitosa para propiedad, validación de propiedad disponible, acceso solo por arrendatario, códigos HTTP y errores |
+| HU007 | TQA034–TQA042: Verificar evaluación de riesgo financiero bajo, medio y alto con matriz de decisión, validación de score crediticio e ingresos mensuales |
+| HU008 | TQA043–TQA046: Verificar cálculo de depósito de garantía según nivel de riesgo (1, 2 o 3 meses), validación de montos |
+| HU009 | TQA047–TQA050: Verificar generación de contrato PDF, validación de datos completos, manejo de errores |
+| HU010 | TQA051–TQA058: Verificar visualización de solicitudes con evaluación, aprobación/rechazo, cambio de estados, acceso exclusivo por arrendador |
 
 ### 8.2 Distribución de tareas DEV por HU
 
@@ -241,6 +280,11 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | HU003 | TD015: Implementar endpoint `POST /api/auth/login` con validación de credenciales · TD017: Implementar redirección con datos de usuario y rol | TD016: Generación de token JWT · TD018: Manejo de errores HTTP y mensajes claros · TD019: Comparación de contraseñas con hashing |
 | HU004 | TD020: Crear tabla propiedades en BD (id, titulo, direccion, descripcion, precio_alquiler, imagenes, fecha_publicacion, arrendador_id, fecha_actualizacion) · TD021: Crear modelo/entidad Propiedad y DTOs · TD022: Implementar endpoint `POST /api/properties` (solo accesible por arrendadores) | TD023: Validaciones de entrada (formato de datos, campos requeridos, límites de caracteres) · TD024: Manejo de errores HTTP y mensajes claros |
 | HU005 | TD025: Implementar endpoint `GET /api/properties` para listar propiedades disponibles · TD026: Componente frontend para mostrar lista de propiedades con detalles | TD027: Manejo de errores HTTP y mensajes claros · TD028: Implementar paginación |
+| HU006 | TD029: Crear tabla solicitudes en BD (id, propiedad_id, arrendatario_id, estado, fecha_aplicacion, fecha_evaluacion) · TD030: Crear modelo/entidad Solicitud y DTOs · TD031: Implementar endpoint `POST /api/applications` (solo accesible por arrendatarios) · TD032: Validaciones funcionales (propiedad disponible, sin solicitud duplicada pendiente) | TD033: Validaciones de entrada (campos requeridos, IDs válidos) · TD034: Manejo de errores HTTP y mensajes claros |
+| HU007 | TD035: Implementar lógica de evaluación de riesgo financiero · TD036: Crear modelo RiskLevel (LOW, MEDIUM, HIGH) · TD037: Implementar matriz de decisión con score crediticio e ingresos mensuales · TD038: Agregar campos financieros a tabla usuarios (monthly_income, credit_score) | TD039: Validaciones de cálculo de ratio ingreso/alquiler · TD040: Manejo de casos sin datos financieros · TD041: Logs de auditoría de evaluaciones |
+| HU008 | TD042: Implementar cálculo de depósito de garantía según nivel de riesgo · TD043: Crear reglas de negocio (1 mes = LOW, 2 meses = MEDIUM, 3 meses = HIGH) | TD044: Validaciones de montos · TD045: Manejo de errores HTTP y mensajes claros |
+| HU009 | TD046: Implementar generación de contrato PDF · TD047: Crear plantilla de contrato con datos dinámicos · TD048: Agregar tabla contratos en BD (id, solicitud_id, fecha_generacion, url_pdf) | TD049: Validación de datos completos antes de generar PDF · TD050: Almacenamiento seguro de PDFs · TD051: Manejo de errores en generación |
+| HU010 | TD052: Implementar endpoint `GET /api/applications/property/{propertyId}` (solo arrendador propietario) · TD053: Implementar endpoint `PUT /api/applications/{id}/approve` · TD054: Implementar endpoint `PUT /api/applications/{id}/reject` · TD055: Validar cambios de estado válidos | TD056: Validaciones de autorización (solo propietario puede gestionar) · TD057: Manejo de errores HTTP y mensajes claros · TD058: Trigger de generación de contrato al aprobar |
 
 ---
 
@@ -248,14 +292,12 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 
 | Sprint | Actividad | Duración estimada |
 |------|-----------|:-----------------:|
-| Micro-Sprint 1 (2 días) | Diseño del plan de pruebas | 2 días |
-| Micro-Sprint 2 (2 días) | Diseño de casos de prueba (todas las HU) | 2 días |
-| Sprint 1 | Automatización HU001 + HU002 (Karate + Cucumber) | 1 día |
-| Sprint 1 | Automatización HU003 (Karate + Cucumber + JWT) | 2 días |
-| Sprint 1 | Automatización HU004 + HU005 (Karate + Cucumber + E2E + prueba manual) | 2.5 días |
-| Sprint 1 | Pruebas de rendimiento k6 | 1 día |
-| Sprint 1 | Regresión + reporte final | 1 día |
-| **TOTAL** | | **11.5 días** |
+| Micro-Sprint 1 | Diseño del plan de pruebas | 2 días |
+| Micro-Sprint 2 | Diseño de casos de prueba (todas las HU) | 2 días |
+| Micro-Sprint 3 | Automatización HU001-HU010 (Karate + Cucumber) | 2 días |
+| Micro-Sprint 3 | Pruebas de rendimiento k6 | 0.5 días |
+| Micro-Sprint 3 | Regresión + reporte final | 0.5 días |
+| **TOTAL** | | **7 días** |
 
 ---
 
