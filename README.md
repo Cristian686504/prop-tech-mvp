@@ -1,6 +1,5 @@
 # 🏠 PropTech MVP — Plataforma de Arrendamiento Inteligente
 
-[![CI/CD Pipeline](https://github.com/TU-USUARIO/prop-tech-mvp/workflows/PropTech%20MVP%20-%20CI/CD%20Pipeline/badge.svg)](https://github.com/TU-USUARIO/prop-tech-mvp/actions)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Coverage](https://img.shields.io/badge/coverage-80%25-brightgreen.svg)](TEST_PLAN.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
@@ -70,7 +69,6 @@ Este MVP fue desarrollado en **3 micro-sprints de 7 días** como parte del Talle
 #### 📌 EP03 — Evaluación Financiera y Contratación (12 SP)
 - **HU007:** Evaluar Perfil Financiero del Arrendatario (2 SP)
 - **HU008:** Cálculo Dinámico del Depósito de Garantía (2 SP)
-- **HU009:** Generación de Contrato de Arrendamiento (3 SP)
 - **HU010:** Gestionar Solicitudes de Alquiler (5 SP)
 
 ### Funcionalidades Fuera del Alcance del MVP
@@ -233,7 +231,7 @@ Este proyecto cuenta con una **estrategia de pruebas completa** documentada en l
 | **TEST_PLAN.md** | Plan de pruebas completo con estrategia, alcance, cronograma y riesgos | [Ver documento](TEST_PLAN.md) |
 | **TEST_CASES.md** | Matriz de casos de prueba con escenarios Gherkin para cada HU | [Ver documento](TEST_CASES.md) |
 | **REALITY_CHECK.md** | Análisis retrospectivo: estimaciones vs realidad, lecciones aprendidas | [Ver documento](REALITY_CHECK.md) |
-| **USER_STORIES.md** | Historias de usuario con criterios de aceptación y Definition of Done | [Ver documento](USER_STORIES.md) |
+
 
 ### Repositorio de Pruebas API (Karate)
 
