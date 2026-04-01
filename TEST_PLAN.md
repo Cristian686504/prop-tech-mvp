@@ -218,7 +218,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | **Sistema operativo del servidor** | Linux (contenedor Docker) |
 | **Base de datos** | PostgreSQL |
 | **Backend** | API REST desplegada en contenedor Docker |
-| **URL base API** | por definir |
+| **URL base API** | localhost:8080 |
 | **Autenticación** | JWT (JSON Web Token) |
 | **CI/CD** | GitHub Actions — ejecución automática de suites de prueba en cada PR |
 
