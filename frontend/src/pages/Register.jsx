@@ -120,6 +120,7 @@ export default function Register() {
 
     try {
       // Remove confirmPassword and combine countryCode with phone before sending to API
+      // eslint-disable-next-line no-unused-vars
       const { confirmPassword, countryCode, phone, ...rest } = formData;
       const registerData = {
         ...rest,
