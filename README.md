@@ -197,14 +197,35 @@ curl http://localhost:8080/actuator/health
 open http://localhost:3000
 ```
 
-### 4. Ejecutar solo el backend (modo desarrollo)
+### 4. Usuarios y Datos de Prueba Precargados
+
+La base de datos incluye usuarios y propiedades de prueba listos para usar:
+
+#### 👤 Credenciales de Prueba
+
+| Rol | Email | Contraseña |
+|-----|-------|-----------|
+| 🏠 Arrendador | `landlord@test.com` | `Test123!` |
+| 🔑 Arrendatario | `tenant@test.com` | `Test123!` |
+
+#### 🏘️ Datos Disponibles
+
+- ✅ **2 usuarios** precargados (1 arrendador + 1 arrendatario)
+- ✅ **3 propiedades** con imágenes de ejemplo
+- ✅ El arrendatario tiene **perfil financiero** completo (score 650, ingreso $4M COP)
+
+> 💡 **Tip:** Usa estas credenciales para login inmediato sin necesidad de registro.
+
+Para más detalles, consulta: [Database Migrations README](backend/applications/app-service/src/main/resources/db/migration/README.md)
+
+### 5. Ejecutar solo el backend (modo desarrollo)
 
 ```bash
 cd backend
 ./gradlew bootRun
 ```
 
-### 5. Ejecutar solo el frontend (modo desarrollo)
+### 6. Ejecutar solo el frontend (modo desarrollo)
 
 ```bash
 cd frontend
@@ -212,7 +233,21 @@ npm install
 npm run dev
 ```
 
-### 6. Ejecutar pruebas unitarias
+### 7. Resetear la base de datos (opcional)
+
+Si necesitas limpiar todos los datos y volver al estado inicial con los usuarios y propiedades de prueba:
+
+```bash
+# Opción 1: Recrear el contenedor (recomendado)
+docker-compose down -v
+docker-compose up -d
+
+# Opción 2: Usar Flyway
+cd backend
+./gradlew flywayClean flywayMigrate
+```
+
+### 8. Ejecutar pruebas unitarias
 
 ```bash
 cd backend
