@@ -1,0 +1,8 @@
+# Force LF line endings for shell scripts to avoid Docker issues on Windows
+*.sh text eol=lf
+
+# Ensure gradlew has LF endings
+gradlew text eol=lf
+
+# Default behavior for all text files
+* text=auto
