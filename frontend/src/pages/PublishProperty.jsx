@@ -20,7 +20,6 @@ function PublishProperty() {
   const [images, setImages] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
   const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [touchedFields, setTouchedFields] = useState({});
@@ -81,12 +80,8 @@ function PublishProperty() {
     
     try {
       // Upload each image
-      const uploadPromises = validFiles.map(async (file, index) => {
-        setUploadProgress(prev => ({ ...prev, [index]: 0 }));
-        
+      const uploadPromises = validFiles.map(async (file) => {
         const url = await propertyService.uploadImage(file);
-        
-        setUploadProgress(prev => ({ ...prev, [index]: 100 }));
         return url;
       });
       
@@ -99,7 +94,6 @@ function PublishProperty() {
       console.error('Error uploading images:', err);
     } finally {
       setUploading(false);
-      setUploadProgress({});
     }
   };
 

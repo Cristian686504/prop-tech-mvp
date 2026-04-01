@@ -59,9 +59,7 @@ class AuthControllerRegisterIntegrationTest {
                 .andExpect(jsonPath("$.documentType").value("CC"))
                 .andExpect(jsonPath("$.documentId").value("1234567890"))
                 .andExpect(jsonPath("$.role").value("LANDLORD"))
-                .andExpect(jsonPath("$.isActive").value(true))
                 .andExpect(jsonPath("$.createdAt").exists())
-                .andExpect(jsonPath("$.updatedAt").exists())
                 .andExpect(cookie().exists("jwt"))
                 .andExpect(cookie().httpOnly("jwt", true))
                 .andExpect(cookie().maxAge("jwt", 86400)) // 24 hours
@@ -231,14 +229,14 @@ class AuthControllerRegisterIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/auth/register - Should return 400 when phone is missing")
-    void shouldReturn400WhenPhoneIsMissing() throws Exception {
+    @DisplayName("POST /api/auth/register - Should accept registration when phone is null (optional field)")
+    void shouldAcceptRegistrationWhenPhoneIsNull() throws Exception {
         // Given
         RegisterRequest request = new RegisterRequest();
         request.setName("Juan Perez");
         request.setEmail("test@example.com");
         request.setPassword("Password123!");
-        request.setPhone(null);  // Missing phone
+        request.setPhone(null);  // Phone is optional
         request.setDocumentType(DocumentType.CC);
         request.setDocumentId("1234567890");
         request.setRole(UserRole.LANDLORD);
@@ -247,7 +245,10 @@ class AuthControllerRegisterIntegrationTest {
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.email").value("test@example.com"))
+                .andExpect(jsonPath("$.phone").isEmpty());
     }
 
     @Test

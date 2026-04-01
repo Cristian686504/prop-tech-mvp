@@ -41,3 +41,13 @@ logging:
     co.com.proptech: DEBUG
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
