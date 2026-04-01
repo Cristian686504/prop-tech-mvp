@@ -255,12 +255,29 @@ jobs:
       - name: 🐳 Start services with Docker Compose
         run: docker compose up -d
 
+      - name: 🔍 Check container status
+        run: docker compose ps
+
       - name: ⏳ Wait for services to be ready
         run: |
-          echo "Waiting for backend..."
-          timeout 60 bash -c 'until curl -f http://localhost:8080/actuator/health; do sleep 2; done'
+          echo "Waiting for database..."
+          timeout 30 bash -c 'until docker compose exec -T postgres pg_isready -U proptech; do sleep 2; done'
+          echo "Waiting for backend (may take up to 60s)..."
+          for i in {1..30}; do
+            if curl -sf http://localhost:8080/actuator/health > /dev/null 2>&1; then
+              echo "✅ Backend is healthy!"
+              break
+            fi
+            echo "Attempt $i/30: Backend not ready yet..."
+            if [ $i -eq 30 ]; then
+              echo "❌ Backend failed to start. Showing logs:"
+              docker compose logs backend
+              exit 1
+            fi
+            sleep 2
+          done
           echo "Waiting for frontend..."
-          timeout 60 bash -c 'until curl -f http://localhost; do sleep 2; done'
+          timeout 30 bash -c 'until curl -sf http://localhost > /dev/null 2>&1; do sleep 2; done'
 
       - name: 🧪 Run smoke tests
         run: |
