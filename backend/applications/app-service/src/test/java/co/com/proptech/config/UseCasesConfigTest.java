@@ -1,11 +1,18 @@
 package co.com.proptech.config;
 
+import co.com.proptech.model.application.gateways.ApplicationRepository;
+import co.com.proptech.model.property.gateways.PropertyRepository;
+import co.com.proptech.model.user.gateways.JwtService;
+import co.com.proptech.model.user.gateways.PasswordEncoder;
+import co.com.proptech.model.user.gateways.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 class UseCasesConfigTest {
 
@@ -22,7 +29,7 @@ class UseCasesConfigTest {
                 }
             }
 
-            assertTrue(useCaseBeanFound, "No beans ending with 'Use Case' were found");
+            assertTrue(useCaseBeanFound, "No beans ending with 'UseCase' were found");
         }
     }
 
@@ -31,14 +38,28 @@ class UseCasesConfigTest {
     static class TestConfig {
 
         @Bean
-        public MyUseCase myUseCase() {
-            return new MyUseCase();
+        public UserRepository userRepository() {
+            return mock(UserRepository.class);
         }
-    }
 
-    static class MyUseCase {
-        public String execute() {
-            return "MyUseCase Test";
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+            return mock(PasswordEncoder.class);
+        }
+
+        @Bean
+        public JwtService jwtService() {
+            return mock(JwtService.class);
+        }
+
+        @Bean
+        public PropertyRepository propertyRepository() {
+            return mock(PropertyRepository.class);
+        }
+
+        @Bean
+        public ApplicationRepository applicationRepository() {
+            return mock(ApplicationRepository.class);
         }
     }
 }
