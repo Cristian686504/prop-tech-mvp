@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
-                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/health").permitAll()
+                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/health", "/actuator/health").permitAll()
                         // Allow OPTIONS for CORS preflight
                         .requestMatchers(request -> "OPTIONS".equals(request.getMethod())).permitAll()
                         // All other endpoints require authentication
