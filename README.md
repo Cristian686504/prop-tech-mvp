@@ -303,8 +303,8 @@ El workflow principal (`.github/workflows/ci.yml`) ejecuta automáticamente:
 
 ```yaml
 # Se ejecuta en:
-- Push a main o develop
-- Pull requests a main o develop
+- Push a cualquier rama
+- Pull requests a cualquier rama
 ```
 
 ### Visualización de Resultados
