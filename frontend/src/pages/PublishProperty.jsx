@@ -57,8 +57,8 @@ function PublishProperty() {
     }
   };
 
-  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB per file
-  const MAX_TOTAL_SIZE = 25 * 1024 * 1024; // 25MB total
+  const MAX_FILE_SIZE = 250 * 1024 * 1024; // 250MB per file
+  const MAX_TOTAL_SIZE = 250 * 1024 * 1024; // 250MB total
 
   const handleImageSelect = async (e) => {
     const files = Array.from(e.target.files);
@@ -70,7 +70,7 @@ function PublishProperty() {
         return false;
       }
       if (file.size > MAX_FILE_SIZE) {
-        setError('Cada imagen debe ser menor a 5MB');
+        setError('Cada imagen debe ser menor a 250MB');
         return false;
       }
       return true;
@@ -82,7 +82,7 @@ function PublishProperty() {
     const currentTotalSize = images.reduce((sum, img) => sum + img.size, 0);
     const newFilesSize = validFiles.reduce((sum, file) => sum + file.size, 0);
     if (currentTotalSize + newFilesSize > MAX_TOTAL_SIZE) {
-      setError('El tamaño total de las imágenes no puede superar 25MB');
+      setError('El tamaño total de las imágenes no puede superar 250MB');
       return;
     }
     
