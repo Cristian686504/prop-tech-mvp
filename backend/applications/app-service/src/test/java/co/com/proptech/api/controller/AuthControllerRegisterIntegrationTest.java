@@ -50,7 +50,7 @@ class AuthControllerRegisterIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.name").value("Juan Perez"))
@@ -87,7 +87,7 @@ class AuthControllerRegisterIntegrationTest {
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(firstRequest)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         // When - Second registration with same email
         RegisterRequest duplicateRequest = new RegisterRequest();
@@ -184,7 +184,7 @@ class AuthControllerRegisterIntegrationTest {
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Maria Garcia"))
                 .andExpect(jsonPath("$.email").value("maria.garcia@example.com"))
                 .andExpect(jsonPath("$.role").value("TENANT"))
@@ -208,7 +208,7 @@ class AuthControllerRegisterIntegrationTest {
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(ccRequest)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.documentType").value("CC"));
 
         // Test NIT
@@ -224,7 +224,7 @@ class AuthControllerRegisterIntegrationTest {
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(nitRequest)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.documentType").value("NIT"));
     }
 
@@ -245,7 +245,7 @@ class AuthControllerRegisterIntegrationTest {
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.email").value("test@example.com"))
                 .andExpect(jsonPath("$.phone").isEmpty());
