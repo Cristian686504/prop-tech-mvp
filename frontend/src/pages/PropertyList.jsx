@@ -196,6 +196,7 @@ function PropertyList() {
             {/* Tabs */}
             <div className="tabs-container">
               <button 
+                id="property-list-tab-properties"
                 className={`tab ${activeTab === 'properties' ? 'active' : ''}`}
                 onClick={() => setActiveTab('properties')}
               >
@@ -206,6 +207,7 @@ function PropertyList() {
                 Buscar Propiedades
               </button>
               <button 
+                id="property-list-tab-applications"
                 className={`tab ${activeTab === 'applications' ? 'active' : ''}`}
                 onClick={() => setActiveTab('applications')}
               >
@@ -286,6 +288,7 @@ function PropertyList() {
               {/* Tabs for Landlord */}
               <div className="tabs-container">
                 <button 
+                  id="property-list-tab-properties-landlord"
                   className={`tab ${activeTab === 'properties' ? 'active' : ''}`}
                   onClick={() => setActiveTab('properties')}
                 >
@@ -296,6 +299,7 @@ function PropertyList() {
                   Mis Propiedades
                 </button>
                 <button 
+                  id="property-list-tab-applications-landlord"
                   className={`tab ${activeTab === 'applications' ? 'active' : ''}`}
                   onClick={() => setActiveTab('applications')}
                 >
@@ -314,7 +318,7 @@ function PropertyList() {
               </div>
               
               {user?.role === 'LANDLORD' && (
-                <Link to="/publish-property" className="publish-button">
+                <Link to="/publish-property" id="property-list-link-publish" className="publish-button">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <line x1="12" y1="5" x2="12" y2="19"/>
                     <line x1="5" y1="12" x2="19" y2="12"/>
@@ -514,7 +518,7 @@ function PropertyList() {
           {user?.role === 'LANDLORD' && (
             <div className="section-header">
               <h2 className="section-title">Propiedades Publicadas</h2>
-              <Link to="/publish-property" className="add-property-button">
+              <Link to="/publish-property" id="property-list-link-add-property" className="add-property-button">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <line x1="12" y1="5" x2="12" y2="19"/>
                   <line x1="5" y1="12" x2="19" y2="12"/>
@@ -539,7 +543,7 @@ function PropertyList() {
                 <line x1="12" y1="16" x2="12.01" y2="16"/>
               </svg>
               {error}
-              <button onClick={loadProperties} className="retry-button">
+              <button onClick={loadProperties} id="property-list-btn-retry" className="retry-button">
                 Reintentar
               </button>
             </div>
@@ -554,7 +558,7 @@ function PropertyList() {
               <h2>No hay propiedades disponibles</h2>
               <p>Sé el primero en publicar una propiedad</p>
               {user?.role === 'LANDLORD' && (
-                <Link to="/publish-property" className="publish-button-empty">
+                <Link to="/publish-property" id="property-list-link-publish-empty" className="publish-button-empty">
                   Publicar Propiedad
                 </Link>
               )}
