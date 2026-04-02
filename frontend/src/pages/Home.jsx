@@ -15,8 +15,8 @@ export default function Home() {
             <span>PropTech Colombia</span>
           </Link>
           <div className="header-actions">
-            <Link to="/login" className="btn-secondary">Iniciar Sesión</Link>
-            <Link to="/register" className="btn-primary">Registrarse</Link>
+            <Link to="/login" id="home-link-login" className="btn-secondary">Iniciar Sesión</Link>
+            <Link to="/register" id="home-link-register" className="btn-primary">Registrarse</Link>
           </div>
         </div>
       </header>
@@ -31,13 +31,13 @@ export default function Home() {
               automatizada y decisiones en menos de 24 horas.
             </p>
             <div className="hero-actions">
-              <Link to="/register?role=arrendatario" className="btn-primary btn-large">
+              <Link to="/register?role=arrendatario" id="home-link-search-property" className="btn-primary btn-large">
                 Buscar Propiedad
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
               </Link>
-              <Link to="/register?role=arrendador" className="btn-outline btn-large">
+              <Link to="/register?role=arrendador" id="home-link-publish-property" className="btn-outline btn-large">
                 Publicar Propiedad
               </Link>
             </div>
@@ -160,7 +160,7 @@ export default function Home() {
       <section className="cta-section">
         <h2>Comienza Hoy</h2>
         <p>Únete a la plataforma que está transformando el arrendamiento en Colombia</p>
-        <Link to="/register" className="btn-primary btn-large">Crear Cuenta Gratis</Link>
+        <Link to="/register" id="home-link-create-account" className="btn-primary btn-large">Crear Cuenta Gratis</Link>
       </section>
 
       {/* Footer */}

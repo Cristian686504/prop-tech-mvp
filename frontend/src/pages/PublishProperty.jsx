@@ -161,7 +161,7 @@ function PublishProperty() {
       <div className="publish-container">
         <div className="publish-content">
         <div className="publish-header">
-          <button onClick={() => navigate('/properties')} className="back-button">
+          <button id="publish-btn-back" onClick={() => navigate('/properties')} className="back-button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
@@ -258,14 +258,14 @@ function PublishProperty() {
             <div className="image-upload-area">
               <input
                 type="file"
-                id="images"
+                id="publish-input-images"
                 multiple
                 accept="image/*"
                 onChange={handleImageSelect}
                 disabled={uploading}
                 style={{ display: 'none' }}
               />
-              <label htmlFor="images" className="upload-button">
+              <label htmlFor="publish-input-images" id="publish-label-upload" className="upload-button">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                   <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -282,6 +282,7 @@ function PublishProperty() {
                   <div key={index} className="image-preview">
                     <img src={URL.createObjectURL(image)} alt={`Preview ${index + 1}`} />
                     <button
+                      id={`publish-btn-remove-image-${index}`}
                       type="button"
                       onClick={() => removeImage(index)}
                       className="remove-image-button"
@@ -298,6 +299,7 @@ function PublishProperty() {
           </div>
 
           <button 
+            id="publish-btn-submit"
             type="submit" 
             className="submit-button"
             disabled={loading || uploading}

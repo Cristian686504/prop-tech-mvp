@@ -60,6 +60,7 @@ export default function Login() {
 
         <div className="role-selector">
           <button
+            id="login-btn-role-tenant"
             type="button"
             className={`role-button ${selectedRole === 'arrendatario' ? 'active' : ''}`}
             onClick={() => setSelectedRole('arrendatario')}
@@ -67,6 +68,7 @@ export default function Login() {
             Arrendatario
           </button>
           <button
+            id="login-btn-role-landlord"
             type="button"
             className={`role-button ${selectedRole === 'arrendador' ? 'active' : ''}`}
             onClick={() => setSelectedRole('arrendador')}
@@ -124,6 +126,7 @@ export default function Login() {
           </div>
 
           <button
+            id="login-btn-submit"
             type="submit"
             className="submit-button"
             disabled={loading}
@@ -134,7 +137,7 @@ export default function Login() {
 
         <div className="login-footer">
           <p>
-            ¿No tienes cuenta? <Link to="/register" className="register-link">Regístrate</Link>
+            ¿No tienes cuenta? <Link id="login-link-register" to="/register" className="register-link">Regístrate</Link>
           </p>
         </div>
       </div>
