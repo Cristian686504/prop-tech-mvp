@@ -46,7 +46,7 @@ public class AuthController {
         // Set JWT in httpOnly cookie
         setJwtCookie(response, authResponse.getToken());
 
-        return ResponseEntity.ok(mapToUserResponse(authResponse.getUser()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapToUserResponse(authResponse.getUser()));
     }
 
     @PostMapping("/login")
