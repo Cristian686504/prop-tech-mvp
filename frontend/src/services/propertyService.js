@@ -47,12 +47,12 @@ const propertyService = {
     return response.json();
   },
 
-  // Upload property image
-  async uploadImage(file) {
+  // Upload property images (batch)
+  async uploadImages(files) {
     const formData = new FormData();
-    formData.append('file', file);
+    files.forEach(file => formData.append('files', file));
     
-    const response = await fetch(`${API_URL}/properties/upload-image`, {
+    const response = await fetch(`${API_URL}/properties/upload-images`, {
       method: 'POST',
       credentials: 'include',
       body: formData,
@@ -60,11 +60,11 @@ const propertyService = {
     
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.error || 'Failed to upload image');
+      throw new Error(error.error || 'Failed to upload images');
     }
     
     const data = await response.json();
-    return data.url;
+    return data.urls;
   },
 
   // Get applications for a property (LANDLORD only)
