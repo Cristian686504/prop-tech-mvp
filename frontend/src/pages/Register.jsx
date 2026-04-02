@@ -165,6 +165,7 @@ export default function Register() {
             <div className="role-options">
               <label className="role-option">
                 <input
+                  id="register-radio-tenant"
                   type="radio"
                   name="role"
                   value="TENANT"
@@ -187,6 +188,7 @@ export default function Register() {
 
               <label className="role-option">
                 <input
+                  id="register-radio-landlord"
                   type="radio"
                   name="role"
                   value="LANDLORD"
@@ -290,6 +292,7 @@ export default function Register() {
             <label htmlFor="phone">Teléfono *</label>
             <div className="phone-input-group">
               <select
+                id="register-select-country-code"
                 name="countryCode"
                 value={formData.countryCode}
                 onChange={handleChange}
@@ -304,7 +307,7 @@ export default function Register() {
               </select>
               <input
                 type="tel"
-                id="phone"
+                id="register-input-phone"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
@@ -323,7 +326,7 @@ export default function Register() {
             <div className="form-group">
               <label htmlFor="documentType">Tipo de Documento *</label>
               <select
-                id="documentType"
+                id="register-select-document-type"
                 name="documentType"
                 value={formData.documentType}
                 onChange={handleChange}
@@ -342,7 +345,7 @@ export default function Register() {
               <label htmlFor="documentId">Número de Documento *</label>
               <input
                 type="text"
-                id="documentId"
+                id="register-input-document-id"
                 name="documentId"
                 value={formData.documentId}
                 onChange={handleChange}
@@ -357,6 +360,7 @@ export default function Register() {
           </div>
 
           <button
+            id="register-btn-submit"
             type="submit"
             className="submit-button"
             disabled={loading}

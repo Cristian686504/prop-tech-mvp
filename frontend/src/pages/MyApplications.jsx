@@ -111,6 +111,7 @@ function MyApplications() {
             <h2>No tienes solicitudes</h2>
             <p>Explora propiedades y aplica para empezar tu búsqueda</p>
             <button 
+              id="my-applications-btn-browse"
               className="browse-button"
               onClick={() => navigate('/properties')}
             >

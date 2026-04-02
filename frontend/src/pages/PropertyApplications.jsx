@@ -137,6 +137,7 @@ function PropertyApplications() {
             <h2>No tienes propiedades publicadas</h2>
             <p>Publica una propiedad para recibir solicitudes</p>
             <button 
+              id="property-applications-btn-publish"
               className="publish-button"
               onClick={() => navigate('/publish')}
             >
@@ -153,6 +154,7 @@ function PropertyApplications() {
                 {myProperties.map((property) => (
                   <button
                     key={property.id}
+                    id={`property-applications-btn-select-${property.id}`}
                     className={`property-item ${selectedProperty?.id === property.id ? 'active' : ''}`}
                     onClick={() => handlePropertySelect(property)}
                   >
@@ -263,13 +265,13 @@ function PropertyApplications() {
                             Aplicó el {formatDate(application.appliedAt)}
                           </p>
                           <div className="action-buttons">
-                            <button className="btn-approve" disabled>
+                            <button id={`property-applications-btn-approve-${application.id}`} className="btn-approve" disabled>
                               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <polyline points="20 6 9 17 4 12"/>
                               </svg>
                               Aprobar
                             </button>
-                            <button className="btn-reject" disabled>
+                            <button id={`property-applications-btn-reject-${application.id}`} className="btn-reject" disabled>
                               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <line x1="18" y1="6" x2="6" y2="18"/>
                                 <line x1="6" y1="6" x2="18" y2="18"/>
