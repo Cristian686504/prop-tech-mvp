@@ -31,5 +31,6 @@ public class PublishPropertyRequestDto {
     @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than zero")
     private BigDecimal price;
 
+    @NotEmpty(message = "At least one image is required")
     private List<String> imageUrls;
 }

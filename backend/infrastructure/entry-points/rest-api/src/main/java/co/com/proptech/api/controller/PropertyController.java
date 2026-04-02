@@ -9,6 +9,7 @@ import co.com.proptech.usecase.property.PublishPropertyUseCase;
 import co.com.proptech.usecase.property.dto.PublishPropertyRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,7 @@ public class PropertyController {
                         .build()
         );
 
-        return ResponseEntity.ok(mapToResponse(property));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapToResponse(property));
     }
 
     @GetMapping

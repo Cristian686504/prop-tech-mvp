@@ -57,16 +57,19 @@ function PublishProperty() {
     }
   };
 
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB per file
+  const MAX_TOTAL_SIZE = 25 * 1024 * 1024; // 25MB total
+
   const handleImageSelect = async (e) => {
     const files = Array.from(e.target.files);
     
-    // Validate file types and sizes
+    // Validate file types and individual sizes
     const validFiles = files.filter(file => {
       if (!file.type.startsWith('image/')) {
         setError('Solo se permiten archivos de imagen');
         return false;
       }
-      if (file.size > 5 * 1024 * 1024) {
+      if (file.size > MAX_FILE_SIZE) {
         setError('Cada imagen debe ser menor a 5MB');
         return false;
       }
@@ -74,23 +77,26 @@ function PublishProperty() {
     });
 
     if (validFiles.length === 0) return;
+
+    // Validate total size (existing + new files)
+    const currentTotalSize = images.reduce((sum, img) => sum + img.size, 0);
+    const newFilesSize = validFiles.reduce((sum, file) => sum + file.size, 0);
+    if (currentTotalSize + newFilesSize > MAX_TOTAL_SIZE) {
+      setError('El tamaño total de las imágenes no puede superar 25MB');
+      return;
+    }
     
     setUploading(true);
     setError('');
     
     try {
-      // Upload each image
-      const uploadPromises = validFiles.map(async (file) => {
-        const url = await propertyService.uploadImage(file);
-        return url;
-      });
-      
-      const urls = await Promise.all(uploadPromises);
+      // Upload all images in a single request
+      const urls = await propertyService.uploadImages(validFiles);
       setImageUrls(prev => [...prev, ...urls]);
       setImages(prev => [...prev, ...validFiles]);
       
     } catch (err) {
-      setError('Error al subir imágenes. Intenta de nuevo.');
+      setError(err.message || 'Error al subir imágenes. Intenta de nuevo.');
       console.error('Error uploading images:', err);
     } finally {
       setUploading(false);
