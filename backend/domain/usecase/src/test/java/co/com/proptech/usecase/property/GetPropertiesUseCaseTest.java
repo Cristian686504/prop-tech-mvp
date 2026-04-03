@@ -1,5 +1,7 @@
 package co.com.proptech.usecase.property;
 
+import co.com.proptech.model.common.PageRequest;
+import co.com.proptech.model.common.PageResponse;
 import co.com.proptech.model.property.Property;
 import co.com.proptech.model.property.PropertyStatus;
 import co.com.proptech.model.property.gateways.PropertyRepository;
@@ -115,6 +117,131 @@ class GetPropertiesUseCaseTest {
 
         // Then
         verify(propertyRepository, times(1)).findAllAvailable();
+    }
+
+    // ========== Pagination Tests (New Feature) ==========
+
+    @Test
+    @DisplayName("Should return paginated properties with correct metadata")
+    void shouldReturnPaginatedPropertiesWithCorrectMetadata() {
+        // Given
+        PageRequest pageRequest = new PageRequest(0, 20, "createdAt", PageRequest.SortDirection.DESC);
+        List<Property> properties = createSampleProperties();
+        PageResponse<Property> pageResponse = new PageResponse<>(properties, 0, 20, 3L);
+        
+        when(propertyRepository.findAllAvailable(pageRequest)).thenReturn(pageResponse);
+
+        // When
+        PageResponse<Property> result = getPropertiesUseCase.execute(pageRequest);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(3, result.getContent().size());
+        assertEquals(0, result.getPage());
+        assertEquals(20, result.getSize());
+        assertEquals(3L, result.getTotalElements());
+        assertEquals(1, result.getTotalPages());
+        assertTrue(result.isFirst());
+        assertTrue(result.isLast());
+        assertFalse(result.hasNext());
+        assertFalse(result.hasPrevious());
+        
+        verify(propertyRepository).findAllAvailable(pageRequest);
+    }
+
+    @Test
+    @DisplayName("Should handle pagination for multiple pages")
+    void shouldHandlePaginationForMultiplePages() {
+        // Given - Page 2 of 3 (21-40 of 50 items)
+        PageRequest pageRequest = new PageRequest(1, 20);
+        List<Property> properties = createSampleProperties();
+        PageResponse<Property> pageResponse = new PageResponse<>(properties, 1, 20, 50L);
+        
+        when(propertyRepository.findAllAvailable(pageRequest)).thenReturn(pageResponse);
+
+        // When
+        PageResponse<Property> result = getPropertiesUseCase.execute(pageRequest);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(1, result.getPage()); // Second page (0-indexed)
+        assertEquals(20, result.getSize());
+        assertEquals(50L, result.getTotalElements());
+        assertEquals(3, result.getTotalPages()); // ceil(50/20) = 3
+        assertFalse(result.isFirst());
+        assertFalse(result.isLast());
+        assertTrue(result.hasNext());
+        assertTrue(result.hasPrevious());
+        
+        verify(propertyRepository).findAllAvailable(pageRequest);
+    }
+
+    @Test
+    @DisplayName("Should return empty page when no properties available")
+    void shouldReturnEmptyPageWhenNoProperties() {
+        // Given
+        PageRequest pageRequest = new PageRequest(0, 20);
+        PageResponse<Property> emptyPage = new PageResponse<>(new ArrayList<>(), 0, 20, 0L);
+        
+        when(propertyRepository.findAllAvailable(pageRequest)).thenReturn(emptyPage);
+
+        // When
+        PageResponse<Property> result = getPropertiesUseCase.execute(pageRequest);
+
+        // Then
+        assertNotNull(result);
+        assertTrue(result.getContent().isEmpty());
+        assertEquals(0, result.getTotalElements());
+        assertEquals(0, result.getTotalPages());
+        
+        verify(propertyRepository).findAllAvailable(pageRequest);
+    }
+
+    @Test
+    @DisplayName("Should respect custom page size in PageRequest")
+    void shouldRespectCustomPageSize() {
+        // Given - Request 5 items per page
+        PageRequest pageRequest = new PageRequest(0, 5);
+        List<Property> properties = createSampleProperties().subList(0, 3);
+        PageResponse<Property> pageResponse = new PageResponse<>(properties, 0, 5, 25L);
+        
+        when(propertyRepository.findAllAvailable(pageRequest)).thenReturn(pageResponse);
+
+        // When
+        PageResponse<Property> result = getPropertiesUseCase.execute(pageRequest);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(5, result.getSize());
+        assertEquals(25L, result.getTotalElements());
+        assertEquals(5, result.getTotalPages()); // ceil(25/5) = 5
+        
+        verify(propertyRepository).findAllAvailable(pageRequest);
+    }
+
+    @Test
+    @DisplayName("Should handle last page with partial results")
+    void shouldHandleLastPageWithPartialResults() {
+        // Given - Last page with only 3 items (page 2 of 2, with 23 total items)
+        PageRequest pageRequest = new PageRequest(1, 20);
+        List<Property> properties = createSampleProperties(); // 3 items
+        PageResponse<Property> pageResponse = new PageResponse<>(properties, 1, 20, 23L);
+        
+        when(propertyRepository.findAllAvailable(pageRequest)).thenReturn(pageResponse);
+
+        // When
+        PageResponse<Property> result = getPropertiesUseCase.execute(pageRequest);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(3, result.getContent().size());
+        assertEquals(1, result.getPage());
+        assertEquals(23L, result.getTotalElements());
+        assertEquals(2, result.getTotalPages()); // ceil(23/20) = 2
+        assertTrue(result.isLast());
+        assertFalse(result.hasNext());
+        
+        verify(propertyRepository).findAllAvailable(pageRequest);
     }
 
     // Helper methods
