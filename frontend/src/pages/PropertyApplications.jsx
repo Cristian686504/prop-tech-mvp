@@ -29,7 +29,8 @@ function PropertyApplications() {
     try {
       setLoading(true);
       setError('');
-      const allProperties = await propertyService.getProperties();
+      const data = await propertyService.getProperties(0, 1000); // Get large page to include all properties
+      const allProperties = data.content || []; // Extract content array from paginated response
       // Filter only properties owned by current user
       const ownedProperties = allProperties.filter(prop => prop.landlordId === user.id);
       setMyProperties(ownedProperties);
