@@ -2,6 +2,8 @@ package co.com.proptech.jpa.repository;
 
 import co.com.proptech.jpa.entity.PropertyEntity;
 import co.com.proptech.model.property.PropertyStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PropertyJpaRepository extends JpaRepository<PropertyEntity, UUID> {
+    
+    Page<PropertyEntity> findAllByStatus(PropertyStatus status, Pageable pageable);
     
     List<PropertyEntity> findAllByStatus(PropertyStatus status);
     

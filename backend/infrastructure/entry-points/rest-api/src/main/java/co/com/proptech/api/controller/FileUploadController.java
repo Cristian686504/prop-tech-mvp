@@ -17,8 +17,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class FileUploadController {
 
-    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB per file
-    private static final long MAX_TOTAL_SIZE = 25 * 1024 * 1024; // 25MB total
+    private static final long MAX_FILE_SIZE = 250L * 1024 * 1024; // 250MB per file
+    private static final long MAX_TOTAL_SIZE = 250L * 1024 * 1024; // 250MB total
 
     private final FileStorage fileStorage;
 
@@ -32,7 +32,7 @@ public class FileUploadController {
         long totalSize = Arrays.stream(files).mapToLong(MultipartFile::getSize).sum();
         if (totalSize > MAX_TOTAL_SIZE) {
             return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-                    .body(Map.of("error", "Total file size must not exceed 25MB"));
+                    .body(Map.of("error", "Total file size must not exceed 250MB"));
         }
 
         // Validate each file individually
@@ -72,7 +72,7 @@ public class FileUploadController {
             return "File must be an image";
         }
         if (file.getSize() > MAX_FILE_SIZE) {
-            return "File size must not exceed 5MB";
+            return "File size must not exceed 250MB";
         }
         return null;
     }

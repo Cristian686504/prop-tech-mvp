@@ -2,9 +2,9 @@
 const API_URL = 'http://localhost:8080/api';
 
 const propertyService = {
-  // Get all available properties
-  async getProperties() {
-    const response = await fetch(`${API_URL}/properties`, {
+  // Get all available properties with pagination
+  async getProperties(page = 0, size = 20) {
+    const response = await fetch(`${API_URL}/properties?page=${page}&size=${size}`, {
       credentials: 'include', // Include cookies for auth
     });
     
