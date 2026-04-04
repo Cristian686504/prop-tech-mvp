@@ -1,5 +1,6 @@
 package co.com.proptech.usecase.property;
 
+import co.com.proptech.model.exceptions.UnauthorizedOperationException;
 import co.com.proptech.model.property.Property;
 import co.com.proptech.model.property.PropertyStatus;
 import co.com.proptech.model.property.gateways.PropertyRepository;
@@ -147,8 +148,8 @@ class PublishPropertyUseCaseTest {
         when(userRepository.findById(landlordId)).thenReturn(Optional.of(tenant));
 
         // When & Then
-        IllegalStateException exception = assertThrows(
-                IllegalStateException.class,
+        UnauthorizedOperationException exception = assertThrows(
+                UnauthorizedOperationException.class,
                 () -> publishPropertyUseCase.execute(request)
         );
 
