@@ -67,17 +67,54 @@ public class GlobalExceptionHandler {
         // Extract more specific error message if available
         if (ex.getCause() != null && ex.getCause().getMessage() != null) {
             String causeMessage = ex.getCause().getMessage();
-            // Simplify technical errors for user-friendly response
+            
+            // Parse field name from Jackson error message
+            // Example: "Cannot deserialize value of type `java.math.BigDecimal` from String \"not-a-number\": not a valid representation
+            //           at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 5, column: 13] (through reference chain: co.com.proptech.api.dto.PublishPropertyRequestDto[\"price\"])"
             if (causeMessage.contains("Cannot deserialize value")) {
-                message = "Invalid data format in request body. Please check field types.";
+                message = extractFieldSpecificMessage(causeMessage);
             } else if (causeMessage.contains("Unexpected character")) {
                 message = "Malformed JSON syntax";
+            } else if (causeMessage.contains("JSON parse error")) {
+                message = "Invalid JSON format";
             }
         }
         
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(message));
+    }
+    
+    /**
+     * Extracts field-specific error message from Jackson deserialization error.
+     */
+    private String extractFieldSpecificMessage(String causeMessage) {
+        try {
+            // Extract field name from reference chain: ["fieldName"]
+            if (causeMessage.contains("reference chain:") && causeMessage.contains("[\"")) {
+                int startIdx = causeMessage.lastIndexOf("[\"") + 2;
+                int endIdx = causeMessage.indexOf("\"]", startIdx);
+                if (startIdx > 1 && endIdx > startIdx) {
+                    String fieldName = causeMessage.substring(startIdx, endIdx);
+                    
+                    // Extract expected type
+                    String expectedType = "valid value";
+                    if (causeMessage.contains("type `java.math.BigDecimal`")) {
+                        expectedType = "numeric value";
+                    } else if (causeMessage.contains("type `java.lang.Integer`") || causeMessage.contains("type `int`")) {
+                        expectedType = "integer value";
+                    } else if (causeMessage.contains("type `java.time.LocalDate`")) {
+                        expectedType = "valid date";
+                    }
+                    
+                    return String.format("Invalid value for field '%s'. Expected %s.", fieldName, expectedType);
+                }
+            }
+        } catch (Exception e) {
+            // Fallback to generic message if parsing fails
+        }
+        
+        return "Invalid data format in request body. Please check field types.";
     }
 
     /**

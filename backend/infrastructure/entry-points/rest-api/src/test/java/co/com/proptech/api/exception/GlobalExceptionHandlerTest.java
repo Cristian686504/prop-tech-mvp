@@ -1,12 +1,15 @@
 package co.com.proptech.api.exception;
 
 import co.com.proptech.model.exceptions.UnauthorizedOperationException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -60,6 +63,30 @@ class GlobalExceptionHandlerTest {
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Should extract field name from Jackson deserialization error")
+    void shouldExtractFieldNameFromJacksonError() {
+        // Given - Simulate real Jackson error message for invalid price field
+        String jacksonErrorMessage = 
+            "Cannot deserialize value of type `java.math.BigDecimal` from String \"not-a-number\": " +
+            "not a valid representation (through reference chain: co.com.proptech.api.dto.PublishPropertyRequestDto[\"price\"])";
+        
+        InvalidFormatException jacksonCause = new InvalidFormatException(
+            null, jacksonErrorMessage, "not-a-number", BigDecimal.class);
+        HttpMessageNotReadableException exception = new HttpMessageNotReadableException(
+            "JSON parse error: " + jacksonErrorMessage, jacksonCause);
+
+        // When
+        ResponseEntity<GlobalExceptionHandler.ErrorResponse> response = handler.handleHttpMessageNotReadable(exception);
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().message())
+            .contains("price")
+            .contains("numeric value");
     }
 
     @Test
