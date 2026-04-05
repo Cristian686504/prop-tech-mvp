@@ -57,8 +57,8 @@ function PublishProperty() {
     }
   };
 
-  const MAX_FILE_SIZE = 250 * 1024 * 1024; // 250MB per file
-  const MAX_TOTAL_SIZE = 250 * 1024 * 1024; // 250MB total
+  const MAX_FILE_SIZE = 250 * 1024 * 1024; // 250MiB per file
+  const MAX_TOTAL_SIZE = 250 * 1024 * 1024; // 250MiB total
 
   const handleImageSelect = async (e) => {
     const files = Array.from(e.target.files);
