@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 @DisplayName("FileUploadController - Size limit tests")
 class FileUploadControllerTest {
 
-    private static final long MB = 1024L * 1024L;
+    private static final long MB = 1024L * 1024L; // MiB (1,048,576 bytes)
 
     @Mock
     private FileStorage fileStorage;

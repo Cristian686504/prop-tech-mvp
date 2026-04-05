@@ -17,8 +17,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class FileUploadController {
 
-    private static final long MAX_FILE_SIZE = 250L * 1024 * 1024; // 250MB per file
-    private static final long MAX_TOTAL_SIZE = 250L * 1024 * 1024; // 250MB total
+    private static final long MAX_FILE_SIZE = 250L * 1024 * 1024; // 250MiB per file
+    private static final long MAX_TOTAL_SIZE = 250L * 1024 * 1024; // 250MiB total
 
     private final FileStorage fileStorage;
 
