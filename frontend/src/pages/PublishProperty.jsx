@@ -273,7 +273,7 @@ function PublishProperty() {
                 </svg>
                 {uploading ? 'Subiendo...' : 'Seleccionar Imágenes'}
               </label>
-              <span className="upload-hint">Max 5MB por imagen • PNG, JPG</span>
+              <span className="upload-hint">Max 250MB por imagen • PNG, JPG</span>
             </div>
 
             {images.length > 0 && (
