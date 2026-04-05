@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.math.BigDecimal;
 
@@ -117,6 +118,23 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().message()).isEqualTo("Only landlords can publish properties");
+    }
+
+    @Test
+    @DisplayName("MaxUploadSizeExceededException should return 413 (not 500)")
+    void maxUploadSizeExceededShouldReturn413() {
+        // Given
+        MaxUploadSizeExceededException exception = new MaxUploadSizeExceededException(250L * 1024 * 1024);
+
+        // When
+        ResponseEntity<GlobalExceptionHandler.ErrorResponse> response = handler.handleMaxUploadSizeExceeded(exception);
+
+        // Then
+        assertThat(response.getStatusCode())
+                .as("MaxUploadSizeExceededException must return 413, not 500")
+                .isEqualTo(HttpStatus.PAYLOAD_TOO_LARGE);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().message()).contains("250MB");
     }
 
     @Test
