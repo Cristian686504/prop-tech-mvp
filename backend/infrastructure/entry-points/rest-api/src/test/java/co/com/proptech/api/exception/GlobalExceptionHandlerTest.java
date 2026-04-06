@@ -1,5 +1,6 @@
 package co.com.proptech.api.exception;
 
+import co.com.proptech.model.exceptions.DuplicateEmailException;
 import co.com.proptech.model.exceptions.InvalidCredentialsException;
 import co.com.proptech.model.exceptions.UnauthorizedOperationException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -98,6 +99,21 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getBody().message())
             .contains("price")
             .contains("numeric value");
+    }
+
+    @Test
+    @DisplayName("Should return 409 Conflict when DuplicateEmailException is thrown")
+    void shouldReturn409ForDuplicateEmail() {
+        // Given
+        DuplicateEmailException exception = new DuplicateEmailException("Email already registered");
+
+        // When
+        ResponseEntity<GlobalExceptionHandler.ErrorResponse> response = handler.handleDuplicateEmail(exception);
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().message()).isEqualTo("Email already registered");
     }
 
     @Test

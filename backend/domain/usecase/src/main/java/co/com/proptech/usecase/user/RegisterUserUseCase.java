@@ -1,5 +1,6 @@
 package co.com.proptech.usecase.user;
 
+import co.com.proptech.model.exceptions.DuplicateEmailException;
 import co.com.proptech.model.user.User;
 import co.com.proptech.model.user.enums.UserRole;
 import co.com.proptech.model.user.gateways.JwtService;
@@ -24,7 +25,7 @@ public class RegisterUserUseCase {
     public AuthResponse execute(RegisterUserRequest request) {
         // Validate email not already registered
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email already registered");
+            throw new DuplicateEmailException("Email already registered");
         }
 
         // Create user

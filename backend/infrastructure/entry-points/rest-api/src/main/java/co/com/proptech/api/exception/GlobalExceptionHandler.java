@@ -1,5 +1,6 @@
 package co.com.proptech.api.exception;
 
+import co.com.proptech.model.exceptions.DuplicateEmailException;
 import co.com.proptech.model.exceptions.InvalidCredentialsException;
 import co.com.proptech.model.exceptions.UnauthorizedOperationException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,13 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(DuplicateEmailException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateEmail(DuplicateEmailException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
 
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCredentials(InvalidCredentialsException ex) {
