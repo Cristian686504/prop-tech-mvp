@@ -1,23 +1,34 @@
 package co.com.proptech.api.exception;
 
+import co.com.proptech.model.exceptions.DuplicateEmailException;
+import co.com.proptech.model.exceptions.InvalidCredentialsException;
 import co.com.proptech.model.exceptions.UnauthorizedOperationException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for GlobalExceptionHandler.
  * Validates that proper HTTP status codes are returned for different exception types.
  */
+@ExtendWith(MockitoExtension.class)
 class GlobalExceptionHandlerTest {
 
     private final GlobalExceptionHandler handler = new GlobalExceptionHandler();
@@ -88,6 +99,21 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getBody().message())
             .contains("price")
             .contains("numeric value");
+    }
+
+    @Test
+    @DisplayName("Should return 409 Conflict when DuplicateEmailException is thrown")
+    void shouldReturn409ForDuplicateEmail() {
+        // Given
+        DuplicateEmailException exception = new DuplicateEmailException("Email already registered");
+
+        // When
+        ResponseEntity<GlobalExceptionHandler.ErrorResponse> response = handler.handleDuplicateEmail(exception);
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().message()).isEqualTo("Email already registered");
     }
 
     @Test
@@ -197,5 +223,139 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getStatusCode())
                 .as("IllegalStateException must return 400 Bad Request, not 500 Internal Server Error")
                 .isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    // ------------------------------------------------------------------
+    // handleInvalidCredentials
+    // ------------------------------------------------------------------
+
+    @Test
+    @DisplayName("InvalidCredentialsException should return 401 Unauthorized")
+    void shouldReturn401ForInvalidCredentials() {
+        InvalidCredentialsException ex = new InvalidCredentialsException("Credenciales inválidas");
+
+        ResponseEntity<GlobalExceptionHandler.ErrorResponse> response = handler.handleInvalidCredentials(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().message()).isEqualTo("Credenciales inválidas");
+    }
+
+    // ------------------------------------------------------------------
+    // handleValidationExceptions
+    // ------------------------------------------------------------------
+
+    @Test
+    @DisplayName("MethodArgumentNotValidException should return 400 with field errors map")
+    void shouldReturn400WithFieldErrorsMap() {
+        BindException bindException = new BindException(new Object(), "req");
+        bindException.addError(new FieldError("req", "email", "Email must be valid"));
+        bindException.addError(new FieldError("req", "name", "Name is required"));
+
+        MethodArgumentNotValidException ex = mock(MethodArgumentNotValidException.class);
+        when(ex.getBindingResult()).thenReturn(bindException);
+
+        ResponseEntity<Map<String, String>> response = handler.handleValidationExceptions(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody()).containsEntry("email", "Email must be valid");
+        assertThat(response.getBody()).containsEntry("name", "Name is required");
+    }
+
+    // ------------------------------------------------------------------
+    // handleHttpMessageNotReadable — additional branches
+    // ------------------------------------------------------------------
+
+    @Test
+    @DisplayName("handleHttpMessageNotReadable - Unexpected character cause should return 'Malformed JSON syntax'")
+    void shouldReturnMalformedJsonSyntaxForUnexpectedCharacter() {
+        RuntimeException cause = new RuntimeException("Unexpected character ('{') at position 5");
+        HttpMessageNotReadableException ex = new HttpMessageNotReadableException("JSON parse error", cause);
+
+        ResponseEntity<GlobalExceptionHandler.ErrorResponse> response = handler.handleHttpMessageNotReadable(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().message()).isEqualTo("Malformed JSON syntax");
+    }
+
+    @Test
+    @DisplayName("handleHttpMessageNotReadable - JSON parse error cause should return 'Invalid JSON format'")
+    void shouldReturnInvalidJsonFormatForJsonParseError() {
+        RuntimeException cause = new RuntimeException("JSON parse error: unexpected content after root");
+        HttpMessageNotReadableException ex = new HttpMessageNotReadableException("JSON parse error", cause);
+
+        ResponseEntity<GlobalExceptionHandler.ErrorResponse> response = handler.handleHttpMessageNotReadable(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().message()).isEqualTo("Invalid JSON format");
+    }
+
+    // ------------------------------------------------------------------
+    // extractFieldSpecificMessage — additional type branches
+    // ------------------------------------------------------------------
+
+    @Test
+    @DisplayName("extractFieldSpecificMessage - Integer type should return 'integer value' message")
+    void shouldExtractIntegerFieldMessage() {
+        String jacksonMsg =
+                "Cannot deserialize value of type `java.lang.Integer` from String \"abc\": " +
+                "not a valid Integer value (through reference chain: MyDto[\"age\"])";
+        InvalidFormatException cause = new InvalidFormatException(null, jacksonMsg, "abc", Integer.class);
+        HttpMessageNotReadableException ex = new HttpMessageNotReadableException("JSON parse error", cause);
+
+        ResponseEntity<GlobalExceptionHandler.ErrorResponse> response = handler.handleHttpMessageNotReadable(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().message())
+                .contains("age")
+                .contains("integer value");
+    }
+
+    @Test
+    @DisplayName("extractFieldSpecificMessage - LocalDate type should return 'valid date' message")
+    void shouldExtractLocalDateFieldMessage() {
+        String jacksonMsg =
+                "Cannot deserialize value of type `java.time.LocalDate` from String \"not-a-date\": " +
+                "not a valid date (through reference chain: MyDto[\"birthDate\"])";
+        InvalidFormatException cause = new InvalidFormatException(null, jacksonMsg, "not-a-date", java.time.LocalDate.class);
+        HttpMessageNotReadableException ex = new HttpMessageNotReadableException("JSON parse error", cause);
+
+        ResponseEntity<GlobalExceptionHandler.ErrorResponse> response = handler.handleHttpMessageNotReadable(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().message())
+                .contains("birthDate")
+                .contains("valid date");
+    }
+
+    @Test
+    @DisplayName("extractFieldSpecificMessage - unknown type should return 'valid value' message")
+    void shouldExtractUnknownTypeFieldMessage() {
+        String jacksonMsg =
+                "Cannot deserialize value of type `java.util.UUID` from String \"not-uuid\": " +
+                "not a valid UUID (through reference chain: MyDto[\"id\"])";
+        InvalidFormatException cause = new InvalidFormatException(null, jacksonMsg, "not-uuid", java.util.UUID.class);
+        HttpMessageNotReadableException ex = new HttpMessageNotReadableException("JSON parse error", cause);
+
+        ResponseEntity<GlobalExceptionHandler.ErrorResponse> response = handler.handleHttpMessageNotReadable(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().message())
+                .contains("id")
+                .contains("valid value");
+    }
+
+    @Test
+    @DisplayName("extractFieldSpecificMessage - no reference chain should return fallback message")
+    void shouldReturnFallbackWhenNoReferenceChain() {
+        String jacksonMsg = "Cannot deserialize value of type `java.math.BigDecimal` from String \"abc\": not a number";
+        InvalidFormatException cause = new InvalidFormatException(null, jacksonMsg, "abc", BigDecimal.class);
+        HttpMessageNotReadableException ex = new HttpMessageNotReadableException("JSON parse error", cause);
+
+        ResponseEntity<GlobalExceptionHandler.ErrorResponse> response = handler.handleHttpMessageNotReadable(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().message()).contains("Invalid data format");
     }
 }

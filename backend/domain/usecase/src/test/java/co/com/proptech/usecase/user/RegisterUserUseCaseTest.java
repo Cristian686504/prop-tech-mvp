@@ -104,7 +104,8 @@ class RegisterUserUseCaseTest {
         when(userRepository.existsByEmail(request.getEmail())).thenReturn(true);
 
         // When & Then
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        co.com.proptech.model.exceptions.DuplicateEmailException exception = assertThrows(
+                co.com.proptech.model.exceptions.DuplicateEmailException.class,
                 () -> registerUserUseCase.execute(request));
 
         assertEquals("Email already registered", exception.getMessage());
