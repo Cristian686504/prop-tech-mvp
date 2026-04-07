@@ -1,5 +1,6 @@
 package co.com.proptech.usecase.user;
 
+import co.com.proptech.model.exceptions.InvalidCredentialsException;
 import co.com.proptech.model.user.User;
 import co.com.proptech.model.user.gateways.JwtService;
 import co.com.proptech.model.user.gateways.PasswordEncoder;
@@ -18,11 +19,11 @@ public class LoginUserUseCase {
     public AuthResponse execute(LoginRequest request) {
         // Find user by email
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid credentials"));
 
         // Verify password
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            throw new IllegalArgumentException("Invalid credentials");
+            throw new InvalidCredentialsException("Invalid credentials");
         }
 
         // Generate JWT

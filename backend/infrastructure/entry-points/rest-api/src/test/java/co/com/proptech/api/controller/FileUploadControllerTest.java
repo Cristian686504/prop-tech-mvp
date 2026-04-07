@@ -129,6 +129,14 @@ class FileUploadControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
+    @Test
+    @DisplayName("Should return 400 when files array is null")
+    void shouldReturn400WhenFilesArrayIsNull() {
+        ResponseEntity<?> response = controller.uploadImages(null);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
     // -----------------------------------------------------------------------
     // Lightweight stub: logical size without allocating megabytes
     // -----------------------------------------------------------------------
