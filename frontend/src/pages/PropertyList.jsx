@@ -18,6 +18,12 @@ function PropertyList() {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [activeTab, setActiveTab] = useState('properties');
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+  const pageSize = 20;
 
   useEffect(() => {
     loadData();
@@ -33,12 +39,17 @@ function PropertyList() {
     }
   };
 
-  const loadProperties = async () => {
+  const loadProperties = async (page = 0) => {
     try {
       setLoading(true);
       setError('');
-      const data = await propertyService.getProperties();
-      setProperties(data);
+      const data = await propertyService.getProperties(page, pageSize);
+      
+      // Handle paginated response from backend
+      setProperties(data.content || []);
+      setTotalPages(data.totalPages || 0);
+      setTotalElements(data.totalElements || 0);
+      setCurrentPage(data.number || 0);
     } catch (err) {
       setError('Error al cargar propiedades. Intenta de nuevo.');
       console.error('Error loading properties:', err);
@@ -73,8 +84,9 @@ function PropertyList() {
 
   const loadLandlordApplications = async () => {
     try {
-      // Get all properties owned by landlord
-      const allProperties = await propertyService.getProperties();
+      // Get all properties owned by landlord (pagination not applied here for simplicity)
+      const data = await propertyService.getProperties(0, 1000);
+      const allProperties = data.content || data || [];
       const myProperties = allProperties.filter(p => p.landlordId === user.id);
       
       // Get applications for each property
@@ -196,6 +208,7 @@ function PropertyList() {
             {/* Tabs */}
             <div className="tabs-container">
               <button 
+                id="property-list-tab-properties"
                 className={`tab ${activeTab === 'properties' ? 'active' : ''}`}
                 onClick={() => setActiveTab('properties')}
               >
@@ -206,6 +219,7 @@ function PropertyList() {
                 Buscar Propiedades
               </button>
               <button 
+                id="property-list-tab-applications"
                 className={`tab ${activeTab === 'applications' ? 'active' : ''}`}
                 onClick={() => setActiveTab('applications')}
               >
@@ -286,6 +300,7 @@ function PropertyList() {
               {/* Tabs for Landlord */}
               <div className="tabs-container">
                 <button 
+                  id="property-list-tab-properties-landlord"
                   className={`tab ${activeTab === 'properties' ? 'active' : ''}`}
                   onClick={() => setActiveTab('properties')}
                 >
@@ -296,6 +311,7 @@ function PropertyList() {
                   Mis Propiedades
                 </button>
                 <button 
+                  id="property-list-tab-applications-landlord"
                   className={`tab ${activeTab === 'applications' ? 'active' : ''}`}
                   onClick={() => setActiveTab('applications')}
                 >
@@ -314,7 +330,7 @@ function PropertyList() {
               </div>
               
               {user?.role === 'LANDLORD' && (
-                <Link to="/publish-property" className="publish-button">
+                <Link to="/publish-property" id="property-list-link-publish" className="publish-button">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <line x1="12" y1="5" x2="12" y2="19"/>
                     <line x1="5" y1="12" x2="19" y2="12"/>
@@ -514,7 +530,7 @@ function PropertyList() {
           {user?.role === 'LANDLORD' && (
             <div className="section-header">
               <h2 className="section-title">Propiedades Publicadas</h2>
-              <Link to="/publish-property" className="add-property-button">
+              <Link to="/publish-property" id="property-list-link-add-property" className="add-property-button">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <line x1="12" y1="5" x2="12" y2="19"/>
                   <line x1="5" y1="12" x2="19" y2="12"/>
@@ -539,7 +555,7 @@ function PropertyList() {
                 <line x1="12" y1="16" x2="12.01" y2="16"/>
               </svg>
               {error}
-              <button onClick={loadProperties} className="retry-button">
+              <button onClick={loadProperties} id="property-list-btn-retry" className="retry-button">
                 Reintentar
               </button>
             </div>
@@ -554,7 +570,7 @@ function PropertyList() {
               <h2>No hay propiedades disponibles</h2>
               <p>Sé el primero en publicar una propiedad</p>
               {user?.role === 'LANDLORD' && (
-                <Link to="/publish-property" className="publish-button-empty">
+                <Link to="/publish-property" id="property-list-link-publish-empty" className="publish-button-empty">
                   Publicar Propiedad
                 </Link>
               )}
@@ -562,19 +578,84 @@ function PropertyList() {
           )}
 
           {!loading && !error && properties.length > 0 && (
-            <div className="properties-grid">
-              {(user?.role === 'LANDLORD' 
-                ? properties.filter(p => p.landlordId === user.id)
-                : properties
-              ).map((property) => (
-                <PropertyCard 
-                  key={property.id} 
-                  property={property}
-                  userRole={user?.role}
-                  onApply={handleApply}
-                />
-              ))}
-            </div>
+            <>
+              <div className="properties-grid">
+                {(user?.role === 'LANDLORD' 
+                  ? properties.filter(p => p.landlordId === user.id)
+                  : properties
+                ).map((property) => (
+                  <PropertyCard 
+                    key={property.id} 
+                    property={property}
+                    userRole={user?.role}
+                    onApply={handleApply}
+                  />
+                ))}
+              </div>
+              
+              {/* Pagination Controls - Always show info, buttons only when multiple pages */}
+              {properties.length > 0 && (
+                <div className="pagination-container">
+                  <div className="pagination-info">
+                    Mostrando {currentPage * pageSize + 1} - {Math.min((currentPage + 1) * pageSize, totalElements)} de {totalElements} propiedades
+                    {totalPages > 0 && ` • Página ${currentPage + 1} de ${totalPages}`}
+                  </div>
+                  {totalPages > 1 && (
+                    <div className="pagination-controls">
+                      <button
+                        className="pagination-btn"
+                        onClick={() => loadProperties(0)}
+                        disabled={currentPage === 0}
+                        aria-label="Primera página"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <polyline points="11 17 6 12 11 7"/>
+                          <polyline points="18 17 13 12 18 7"/>
+                        </svg>
+                      </button>
+                      
+                      <button
+                        className="pagination-btn"
+                        onClick={() => loadProperties(currentPage - 1)}
+                        disabled={currentPage === 0}
+                        aria-label="Página anterior"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                      </button>
+                      
+                      <span className="pagination-current">
+                        Página {currentPage + 1} de {totalPages}
+                      </span>
+                      
+                      <button
+                        className="pagination-btn"
+                        onClick={() => loadProperties(currentPage + 1)}
+                        disabled={currentPage >= totalPages - 1}
+                        aria-label="Página siguiente"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </button>
+                      
+                      <button
+                        className="pagination-btn"
+                        onClick={() => loadProperties(totalPages - 1)}
+                        disabled={currentPage >= totalPages - 1}
+                        aria-label="Última página"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <polyline points="13 17 18 12 13 7"/>
+                          <polyline points="6 17 11 12 6 7"/>
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
           )}
         </>
       )}

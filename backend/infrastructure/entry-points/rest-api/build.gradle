@@ -7,6 +7,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'jakarta.servlet:jakarta.servlet-api'
     
+    // Spring Data Commons for Page/PageImpl (HTTP response DTO conversion)
+    implementation 'org.springframework.data:spring-data-commons'
+    
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'

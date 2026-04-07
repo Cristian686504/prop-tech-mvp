@@ -20,6 +20,11 @@ subprojects {
             languageVersion = JavaLanguageVersion.of(17)
         }
     }
+    
+    // Enable parameter names for reflection (required for @RequestParam without explicit name)
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '-parameters'
+    }
 
     //build.dependsOn 'pitest'
 

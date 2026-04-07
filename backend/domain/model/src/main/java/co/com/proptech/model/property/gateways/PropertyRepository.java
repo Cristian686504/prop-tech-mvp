@@ -1,5 +1,7 @@
 package co.com.proptech.model.property.gateways;
 
+import co.com.proptech.model.common.PageRequest;
+import co.com.proptech.model.common.PageResponse;
 import co.com.proptech.model.property.Property;
 import co.com.proptech.model.property.PropertyStatus;
 
@@ -10,6 +12,7 @@ import java.util.UUID;
 /**
  * Property repository gateway (port)
  * Following Dependency Inversion Principle (SOLID)
+ * Domain layer with no framework dependencies (Clean Architecture)
  */
 public interface PropertyRepository {
     
@@ -36,9 +39,18 @@ public interface PropertyRepository {
     List<Property> findAll(PropertyStatus status, UUID landlordId);
     
     /**
-     * Find all available properties
-     * @return List of available properties
+     * Find all available properties with pagination
+     * @param pageRequest Pagination parameters (domain POJO)
+     * @return Page of available properties
      */
+    PageResponse<Property> findAllAvailable(PageRequest pageRequest);
+    
+    /**
+     * Find all available properties (no pagination)
+     * @return List of available properties
+     * @deprecated Use findAllAvailable(Pageable) for better performance
+     */
+    @Deprecated
     List<Property> findAllAvailable();
     
     /**

@@ -1,5 +1,6 @@
 package co.com.proptech.usecase.property;
 
+import co.com.proptech.model.exceptions.UnauthorizedOperationException;
 import co.com.proptech.model.property.Property;
 import co.com.proptech.model.property.PropertyStatus;
 import co.com.proptech.model.property.gateways.PropertyRepository;
@@ -28,7 +29,7 @@ public class PublishPropertyUseCase {
      * @param request Property details
      * @return Published property
      * @throws IllegalArgumentException if validation fails
-     * @throws IllegalStateException if user is not a landlord
+     * @throws UnauthorizedOperationException if user is not a landlord
      */
     public Property execute(PublishPropertyRequest request) {
         // Verify landlord exists and has LANDLORD role
@@ -36,7 +37,7 @@ public class PublishPropertyUseCase {
                 .orElseThrow(() -> new IllegalArgumentException("Landlord not found"));
         
         if (landlord.getRole() != UserRole.LANDLORD) {
-            throw new IllegalStateException("Only landlords can publish properties");
+            throw new UnauthorizedOperationException("Only landlords can publish properties");
         }
         
         // Create property

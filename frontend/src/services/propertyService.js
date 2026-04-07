@@ -1,10 +1,10 @@
 // Service Layer - Infrastructure (API calls)
-const API_URL = 'http://localhost:8080/api';
+const API_URL = (import.meta.env.VITE_API_BASE_URL || '/api');
 
 const propertyService = {
-  // Get all available properties
-  async getProperties() {
-    const response = await fetch(`${API_URL}/properties`, {
+  // Get all available properties with pagination
+  async getProperties(page = 0, size = 20) {
+    const response = await fetch(`${API_URL}/properties?page=${page}&size=${size}`, {
       credentials: 'include', // Include cookies for auth
     });
     
@@ -47,12 +47,12 @@ const propertyService = {
     return response.json();
   },
 
-  // Upload property image
-  async uploadImage(file) {
+  // Upload property images (batch)
+  async uploadImages(files) {
     const formData = new FormData();
-    formData.append('file', file);
+    files.forEach(file => formData.append('files', file));
     
-    const response = await fetch(`${API_URL}/properties/upload-image`, {
+    const response = await fetch(`${API_URL}/properties/upload-images`, {
       method: 'POST',
       credentials: 'include',
       body: formData,
@@ -60,11 +60,11 @@ const propertyService = {
     
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.error || 'Failed to upload image');
+      throw new Error(error.error || 'Failed to upload images');
     }
     
     const data = await response.json();
-    return data.url;
+    return data.urls;
   },
 
   // Get applications for a property (LANDLORD only)

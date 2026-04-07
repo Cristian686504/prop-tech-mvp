@@ -78,7 +78,8 @@ function PropertyCard({ property, userRole, onApply }) {
             <p className="property-price">{formatPrice(property.price)}</p>
           </div>
           {isTenant && isAvailable && (
-            <button 
+            <button
+              id={`property-card-btn-apply-${property.id}`}
               className="property-button-apply"
               onClick={() => onApply(property.id)}
             >

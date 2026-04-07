@@ -2,10 +2,15 @@ package co.com.proptech.jpa.adapter;
 
 import co.com.proptech.jpa.entity.PropertyEntity;
 import co.com.proptech.jpa.repository.PropertyJpaRepository;
+import co.com.proptech.model.common.PageRequest;
+import co.com.proptech.model.common.PageResponse;
 import co.com.proptech.model.property.Property;
 import co.com.proptech.model.property.PropertyStatus;
 import co.com.proptech.model.property.gateways.PropertyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,6 +18,10 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Infrastructure adapter that converts between domain POJOs and Spring Data classes
+ * This is where framework dependencies are allowed (hexagonal architecture)
+ */
 @Repository
 @RequiredArgsConstructor
 public class PropertyRepositoryAdapter implements PropertyRepository {
@@ -40,6 +49,29 @@ public class PropertyRepositoryAdapter implements PropertyRepository {
     }
 
     @Override
+    public PageResponse<Property> findAllAvailable(PageRequest pageRequest) {
+        // Convert domain PageRequest to Spring Data Pageable
+        Pageable pageable = toSpringPageable(pageRequest);
+        
+        // Execute query with Spring Data
+        Page<PropertyEntity> springPage = jpaRepository.findAllByStatus(PropertyStatus.AVAILABLE, pageable);
+        
+        // Convert Spring Data Page to domain PageResponse
+        List<Property> domainProperties = springPage.getContent()
+                .stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+        
+        return new PageResponse<>(
+                domainProperties,
+                springPage.getNumber(),
+                springPage.getSize(),
+                springPage.getTotalElements()
+        );
+    }
+    
+    @Override
+    @Deprecated
     public List<Property> findAllAvailable() {
         return jpaRepository.findAllByStatus(PropertyStatus.AVAILABLE)
                 .stream()
@@ -94,5 +126,22 @@ public class PropertyRepositoryAdapter implements PropertyRepository {
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
+    }
+    
+    /**
+     * Convert domain PageRequest to Spring Data Pageable
+     */
+    private Pageable toSpringPageable(PageRequest pageRequest) {
+        Sort.Direction direction = pageRequest.getDirection() == PageRequest.SortDirection.ASC 
+                ? Sort.Direction.ASC 
+                : Sort.Direction.DESC;
+        
+        Sort sort = Sort.by(direction, pageRequest.getSortBy());
+        
+        return org.springframework.data.domain.PageRequest.of(
+                pageRequest.getPage(),
+                pageRequest.getSize(),
+                sort
+        );
     }
 }

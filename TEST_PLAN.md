@@ -89,12 +89,11 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | CA008 | Usuario no autenticado intenta crear publicación | Automatizada |
 | CA009 | Usuario con rol distinto a arrendador intenta crear publicación | Automatizada |
 
-#### HU005 — Visualizar Propiedades Disponibles (3 CA)
+#### HU005 — Visualizar Propiedades Disponibles (2 CA)
 | CA | Escenario | Tipo de ejecución |
 |----|-----------|:-----------------:|
 | CA001 | Visualización de propiedades disponibles | Automatizada |
-| CA002 | No hay propiedades disponibles | Automatizada |
-| CA003 | Usuario no autenticado quiere ver propiedades | Automatizada |
+| CA002 | Usuario no autenticado quiere ver propiedades | Automatizada |
 
 #### HU006 — Aplicar para Alquilar Propiedad (3 CA)
 | CA | Escenario | Tipo de ejecución |
@@ -218,7 +217,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | **Sistema operativo del servidor** | Linux (contenedor Docker) |
 | **Base de datos** | PostgreSQL |
 | **Backend** | API REST desplegada en contenedor Docker |
-| **URL base API** | por definir |
+| **URL base API** | localhost:8080 |
 | **Autenticación** | JWT (JSON Web Token) |
 | **CI/CD** | GitHub Actions — ejecución automática de suites de prueba en cada PR |
 
