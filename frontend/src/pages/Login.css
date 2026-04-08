@@ -99,41 +99,45 @@
 }
 
 .input-wrapper {
-  position: relative;
   display: flex;
   align-items: center;
+  gap: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0 1rem;
+  background: white;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-wrapper:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .input-icon {
-  position: absolute;
-  left: 1rem;
+  display: flex;
+  flex-shrink: 0;
   color: #94a3b8;
   pointer-events: none;
 }
 
 .input-wrapper input {
   width: 100%;
-  padding: 0.875rem 1rem 0.875rem 3rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 0.5rem;
+  padding: 0.875rem 0;
+  border: none;
+  background: transparent;
   font-size: 0.9375rem;
-  transition: all 0.2s;
   color: #1e293b;
+  outline: none;
 }
 
 .input-wrapper input::placeholder {
   color: #cbd5e1;
 }
 
-.input-wrapper input:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
 .input-wrapper input:disabled {
-  background: #f8fafc;
   cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .submit-button {
@@ -290,41 +294,44 @@
 }
 
 .input-wrapper {
-  position: relative;
   display: flex;
   align-items: center;
+  gap: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0 1rem;
+  background: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-wrapper:focus-within {
+  border-color: #0f4c81;
+  box-shadow: 0 0 0 4px rgba(15, 76, 129, 0.1);
+}
+
+.input-wrapper:focus-within .input-icon {
+  color: #0f4c81;
 }
 
 .input-icon {
-  position: absolute;
-  left: 1rem;
+  display: flex;
+  flex-shrink: 0;
   color: #94a3b8;
   pointer-events: none;
 }
 
 .input-wrapper input {
   width: 100%;
-  padding: 0.875rem 1rem 0.875rem 3rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 10px;
+  padding: 0.875rem 0;
+  border: none;
+  background: transparent;
   font-size: 1rem;
-  transition: all 0.2s ease;
   font-family: inherit;
-  background-color: white;
-}
-
-.input-wrapper input:focus {
+  color: #1e293b;
   outline: none;
-  border-color: #0f4c81;
-  box-shadow: 0 0 0 4px rgba(15, 76, 129, 0.1);
-}
-
-.input-wrapper input:focus + .input-icon {
-  color: #0f4c81;
 }
 
 .input-wrapper input:disabled {
-  background-color: #f8fafc;
   cursor: not-allowed;
   opacity: 0.6;
 }
