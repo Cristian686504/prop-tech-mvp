@@ -80,6 +80,22 @@ public class PropertyRepositoryAdapter implements PropertyRepository {
     }
 
     @Override
+    public PageResponse<Property> findByLandlordId(UUID landlordId, PageRequest pageRequest) {
+        Pageable pageable = toSpringPageable(pageRequest);
+        Page<PropertyEntity> springPage = jpaRepository.findAllByLandlordId(landlordId, pageable);
+        List<Property> domainProperties = springPage.getContent()
+                .stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+        return new PageResponse<>(
+                domainProperties,
+                springPage.getNumber(),
+                springPage.getSize(),
+                springPage.getTotalElements()
+        );
+    }
+
+    @Override
     public List<Property> findByLandlordId(UUID landlordId) {
         return jpaRepository.findAllByLandlordId(landlordId)
                 .stream()

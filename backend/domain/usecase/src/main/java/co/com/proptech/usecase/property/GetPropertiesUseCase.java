@@ -7,6 +7,7 @@ import co.com.proptech.model.property.gateways.PropertyRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Use case for retrieving all available properties
@@ -25,6 +26,16 @@ public class GetPropertiesUseCase {
      */
     public PageResponse<Property> execute(PageRequest pageRequest) {
         return propertyRepository.findAllAvailable(pageRequest);
+    }
+
+    /**
+     * Execute the use case to get properties belonging to a specific landlord with pagination
+     * @param pageRequest Pagination parameters (domain POJO)
+     * @param landlordId  Landlord user ID
+     * @return Page of landlord's properties
+     */
+    public PageResponse<Property> execute(PageRequest pageRequest, UUID landlordId) {
+        return propertyRepository.findByLandlordId(landlordId, pageRequest);
     }
     
     /**

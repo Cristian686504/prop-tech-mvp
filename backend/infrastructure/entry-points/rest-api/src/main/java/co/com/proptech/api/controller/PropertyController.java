@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/api/properties")
 @RequiredArgsConstructor
@@ -54,13 +53,16 @@ public class PropertyController {
     @GetMapping
     public ResponseEntity<Page<PropertyResponse>> getAllProperties(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) UUID landlordId) {
         
         // Convert HTTP params to domain PageRequest (POJO)
         PageRequest pageRequest = new PageRequest(page, size, "createdAt", PageRequest.SortDirection.DESC);
         
-        // Execute use case (returns domain PageResponse)
-        PageResponse<Property> domainPage = getPropertiesUseCase.execute(pageRequest);
+        // Execute use case — filter by landlord when provided
+        PageResponse<Property> domainPage = (landlordId != null)
+                ? getPropertiesUseCase.execute(pageRequest, landlordId)
+                : getPropertiesUseCase.execute(pageRequest);
         
         // Convert domain PageResponse to Spring Data Page for HTTP response
         List<PropertyResponse> responseContent = domainPage.getContent()

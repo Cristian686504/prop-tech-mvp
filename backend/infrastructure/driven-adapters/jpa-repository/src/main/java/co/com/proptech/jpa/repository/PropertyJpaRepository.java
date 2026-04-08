@@ -18,7 +18,9 @@ public interface PropertyJpaRepository extends JpaRepository<PropertyEntity, UUI
     List<PropertyEntity> findAllByStatus(PropertyStatus status);
     
     List<PropertyEntity> findAllByLandlordId(UUID landlordId);
-    
+
+    Page<PropertyEntity> findAllByLandlordId(UUID landlordId, Pageable pageable);
+
     @Query("SELECT p FROM PropertyEntity p WHERE " +
            "(:status IS NULL OR p.status = :status) AND " +
            "(:landlordId IS NULL OR p.landlordId = :landlordId)")

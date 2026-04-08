@@ -54,6 +54,14 @@ public interface PropertyRepository {
     List<Property> findAllAvailable();
     
     /**
+     * Find properties by landlord with pagination
+     * @param landlordId Landlord ID
+     * @param pageRequest Pagination parameters
+     * @return Page of landlord's properties
+     */
+    PageResponse<Property> findByLandlordId(UUID landlordId, PageRequest pageRequest);
+
+    /**
      * Find properties by landlord
      * @param landlordId Landlord ID
      * @return List of landlord's properties

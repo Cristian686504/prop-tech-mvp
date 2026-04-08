@@ -43,7 +43,8 @@ function PropertyList() {
     try {
       setLoading(true);
       setError('');
-      const data = await propertyService.getProperties(page, pageSize);
+      const landlordFilter = user?.role === 'LANDLORD' ? user.id : null;
+      const data = await propertyService.getProperties(page, pageSize, landlordFilter);
       
       // Handle paginated response from backend
       setProperties(data.content || []);
@@ -84,10 +85,9 @@ function PropertyList() {
 
   const loadLandlordApplications = async () => {
     try {
-      // Get all properties owned by landlord (pagination not applied here for simplicity)
-      const data = await propertyService.getProperties(0, 1000);
-      const allProperties = data.content || data || [];
-      const myProperties = allProperties.filter(p => p.landlordId === user.id);
+      // Get only this landlord's properties using the server-side filter
+      const data = await propertyService.getProperties(0, 1000, user.id);
+      const myProperties = data.content || [];
       
       // Get applications for each property
       const allApplications = [];
@@ -137,8 +137,8 @@ function PropertyList() {
   };
 
   const landlordStats = {
-    totalProperties: properties.filter(p => p.landlordId === user?.id).length,
-    availableProperties: properties.filter(p => p.landlordId === user?.id && p.status === 'AVAILABLE').length,
+    totalProperties: totalElements,
+    availableProperties: properties.filter(p => p.status === 'AVAILABLE').length,
     totalApplications: propertyApplications.length,
     pendingApplications: propertyApplications.filter(app => app.status === 'PENDING').length
   };
@@ -580,10 +580,7 @@ function PropertyList() {
           {!loading && !error && properties.length > 0 && (
             <>
               <div className="properties-grid">
-                {(user?.role === 'LANDLORD' 
-                  ? properties.filter(p => p.landlordId === user.id)
-                  : properties
-                ).map((property) => (
+                {properties.map((property) => (
                   <PropertyCard 
                     key={property.id} 
                     property={property}

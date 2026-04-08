@@ -2,9 +2,13 @@
 const API_URL = (import.meta.env.VITE_API_BASE_URL || '/api');
 
 const propertyService = {
-  // Get all available properties with pagination
-  async getProperties(page = 0, size = 20) {
-    const response = await fetch(`${API_URL}/properties?page=${page}&size=${size}`, {
+  // Get all available properties with pagination (optionally filtered by landlordId)
+  async getProperties(page = 0, size = 20, landlordId = null) {
+    let url = `${API_URL}/properties?page=${page}&size=${size}`;
+    if (landlordId) {
+      url += `&landlordId=${landlordId}`;
+    }
+    const response = await fetch(url, {
       credentials: 'include', // Include cookies for auth
     });
     
