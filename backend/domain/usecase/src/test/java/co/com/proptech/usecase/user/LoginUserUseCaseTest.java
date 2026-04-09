@@ -1,5 +1,6 @@
 package co.com.proptech.usecase.user;
 
+import co.com.proptech.model.exceptions.InvalidCredentialsException;
 import co.com.proptech.model.user.User;
 import co.com.proptech.model.user.enums.UserRole;
 import co.com.proptech.model.user.gateways.JwtService;
@@ -94,8 +95,8 @@ class LoginUserUseCaseTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        InvalidCredentialsException exception = assertThrows(
+                InvalidCredentialsException.class,
                 () -> loginUserUseCase.execute(request)
         );
         assertEquals("Invalid credentials", exception.getMessage());
@@ -130,8 +131,8 @@ class LoginUserUseCaseTest {
         when(passwordEncoder.matches(password, correctHash)).thenReturn(false);
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        InvalidCredentialsException exception = assertThrows(
+                InvalidCredentialsException.class,
                 () -> loginUserUseCase.execute(request)
         );
         assertEquals("Invalid credentials", exception.getMessage());

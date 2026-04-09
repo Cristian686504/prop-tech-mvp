@@ -1,5 +1,7 @@
 package co.com.proptech.api.exception;
 
+import co.com.proptech.model.exceptions.DuplicateEmailException;
+import co.com.proptech.model.exceptions.InvalidCredentialsException;
 import co.com.proptech.model.exceptions.UnauthorizedOperationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,12 +11,27 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(DuplicateEmailException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateEmail(DuplicateEmailException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentials(InvalidCredentialsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
@@ -67,17 +84,54 @@ public class GlobalExceptionHandler {
         // Extract more specific error message if available
         if (ex.getCause() != null && ex.getCause().getMessage() != null) {
             String causeMessage = ex.getCause().getMessage();
-            // Simplify technical errors for user-friendly response
+            
+            // Parse field name from Jackson error message
+            // Example: "Cannot deserialize value of type `java.math.BigDecimal` from String \"not-a-number\": not a valid representation
+            //           at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 5, column: 13] (through reference chain: co.com.proptech.api.dto.PublishPropertyRequestDto[\"price\"])"
             if (causeMessage.contains("Cannot deserialize value")) {
-                message = "Invalid data format in request body. Please check field types.";
+                message = extractFieldSpecificMessage(causeMessage);
             } else if (causeMessage.contains("Unexpected character")) {
                 message = "Malformed JSON syntax";
+            } else if (causeMessage.contains("JSON parse error")) {
+                message = "Invalid JSON format";
             }
         }
         
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(message));
+    }
+    
+    /**
+     * Extracts field-specific error message from Jackson deserialization error.
+     */
+    private String extractFieldSpecificMessage(String causeMessage) {
+        try {
+            // Extract field name from reference chain: ["fieldName"]
+            if (causeMessage.contains("reference chain:") && causeMessage.contains("[\"")) {
+                int startIdx = causeMessage.lastIndexOf("[\"") + 2;
+                int endIdx = causeMessage.indexOf("\"]", startIdx);
+                if (startIdx > 1 && endIdx > startIdx) {
+                    String fieldName = causeMessage.substring(startIdx, endIdx);
+                    
+                    // Extract expected type
+                    String expectedType = "valid value";
+                    if (causeMessage.contains("type `java.math.BigDecimal`")) {
+                        expectedType = "numeric value";
+                    } else if (causeMessage.contains("type `java.lang.Integer`") || causeMessage.contains("type `int`")) {
+                        expectedType = "integer value";
+                    } else if (causeMessage.contains("type `java.time.LocalDate`")) {
+                        expectedType = "valid date";
+                    }
+                    
+                    return String.format("Invalid value for field '%s'. Expected %s.", fieldName, expectedType);
+                }
+            }
+        } catch (Exception e) {
+            // Fallback to generic message if parsing fails
+        }
+        
+        return "Invalid data format in request body. Please check field types.";
     }
 
     /**
@@ -110,6 +164,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException ex) {
+        return ResponseEntity
+                .status(HttpStatus.PAYLOAD_TOO_LARGE)
+                .body(new ErrorResponse("El tamaño total de las imágenes no puede superar 250MB"));
     }
 
     @ExceptionHandler(Exception.class)

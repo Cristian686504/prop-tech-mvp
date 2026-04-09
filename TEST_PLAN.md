@@ -144,6 +144,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | — | Soporte a clientes | Fuera del alcance del MVP |
 | — | Filtro de propiedades | Fuera del alcance del MVP |
 | — | Pruebas de seguridad (inyección SQL, XSS, manipulación JWT, hashing de contraseñas) | Se abordarán en un ciclo dedicado de seguridad |
+| HU009  | Generación de Contrato de Arrendamiento | Se tiene desconocimiento de la parte legal del contrato |
 
 ---
 
@@ -174,7 +175,6 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 - Para las pruebas de API con Karate se utilizarán payloads JSON definidos en archivos `.json` dentro del proyecto de pruebas.
 - La base de datos de pruebas se reiniciará antes de cada ciclo de ejecución para garantizar un estado limpio y reproducible.
 - Se prepararán sets de datos específicos para escenarios negativos (correos duplicados, campos vacíos, datos inválidos).
-- Para las pruebas de rendimiento con k6, los payloads de registro serán generados dinámicamente con **@faker-js/faker** durante la ejecución del script, garantizando unicidad de correos entre VUs y evitando colisiones de datos en la base de datos bajo carga concurrente.
 
 ---
 
@@ -239,7 +239,6 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | **Karate DSL** | 1.5.2 | Pruebas exclusivas de API REST — validación de contratos de API: códigos HTTP, estructura JSON y schemas |
 | **k6** | 1.6.1 | Pruebas de rendimiento — carga, estrés y umbrales de latencia |
 | **JUnit 5 / Mockito** | 5.13.4 / 5.23.0 | Pruebas unitarias (responsabilidad DEV) |
-| **@faker-js/faker** | 1.0.2 | Generación de datos de prueba aleatorios |
 | **GitHub Issues** | — | Bug Tracker — registro y seguimiento de defectos |
 | **GitHub Actions** | — | CI/CD — ejecución automática de suites de prueba |
 | **Postman** | 12.3.0 | Exploración y pruebas manuales |
@@ -267,7 +266,6 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | HU006 | TQA029–TQA033: Verificar aplicación exitosa para propiedad, validación de propiedad disponible, acceso solo por arrendatario, códigos HTTP y errores |
 | HU007 | TQA034–TQA042: Verificar evaluación de riesgo financiero bajo, medio y alto con matriz de decisión, validación de score crediticio e ingresos mensuales |
 | HU008 | TQA043–TQA046: Verificar cálculo de depósito de garantía según nivel de riesgo (1, 2 o 3 meses), validación de montos |
-| HU009 | TQA047–TQA050: Verificar generación de contrato PDF, validación de datos completos, manejo de errores |
 | HU010 | TQA051–TQA058: Verificar visualización de solicitudes con evaluación, aprobación/rechazo, cambio de estados, acceso exclusivo por arrendador |
 
 ### 8.2 Distribución de tareas DEV por HU
@@ -282,7 +280,6 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | HU006 | TD029: Crear tabla solicitudes en BD (id, propiedad_id, arrendatario_id, estado, fecha_aplicacion, fecha_evaluacion) · TD030: Crear modelo/entidad Solicitud y DTOs · TD031: Implementar endpoint `POST /api/applications` (solo accesible por arrendatarios) · TD032: Validaciones funcionales (propiedad disponible, sin solicitud duplicada pendiente) | TD033: Validaciones de entrada (campos requeridos, IDs válidos) · TD034: Manejo de errores HTTP y mensajes claros |
 | HU007 | TD035: Implementar lógica de evaluación de riesgo financiero · TD036: Crear modelo RiskLevel (LOW, MEDIUM, HIGH) · TD037: Implementar matriz de decisión con score crediticio e ingresos mensuales · TD038: Agregar campos financieros a tabla usuarios (monthly_income, credit_score) | TD039: Validaciones de cálculo de ratio ingreso/alquiler · TD040: Manejo de casos sin datos financieros · TD041: Logs de auditoría de evaluaciones |
 | HU008 | TD042: Implementar cálculo de depósito de garantía según nivel de riesgo · TD043: Crear reglas de negocio (1 mes = LOW, 2 meses = MEDIUM, 3 meses = HIGH) | TD044: Validaciones de montos · TD045: Manejo de errores HTTP y mensajes claros |
-| HU009 | TD046: Implementar generación de contrato PDF · TD047: Crear plantilla de contrato con datos dinámicos · TD048: Agregar tabla contratos en BD (id, solicitud_id, fecha_generacion, url_pdf) | TD049: Validación de datos completos antes de generar PDF · TD050: Almacenamiento seguro de PDFs · TD051: Manejo de errores en generación |
 | HU010 | TD052: Implementar endpoint `GET /api/applications/property/{propertyId}` (solo arrendador propietario) · TD053: Implementar endpoint `PUT /api/applications/{id}/approve` · TD054: Implementar endpoint `PUT /api/applications/{id}/reject` · TD055: Validar cambios de estado válidos | TD056: Validaciones de autorización (solo propietario puede gestionar) · TD057: Manejo de errores HTTP y mensajes claros · TD058: Trigger de generación de contrato al aprobar |
 
 ---

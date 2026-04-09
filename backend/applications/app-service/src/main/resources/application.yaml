@@ -10,6 +10,10 @@ spring:
     username: ${DATABASE_USER:proptech}
     password: ${DATABASE_PASSWORD:proptech}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+      connection-timeout: 30000
   jpa:
     hibernate:
       ddl-auto: validate
@@ -24,13 +28,17 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 5MB
-      max-request-size: 5MB
+      max-file-size: 262144000B
+      max-request-size: 263192576B
   profiles:
     include: null
 jwt:
   secret: "${JWT_SECRET}"
   expiration: 86400000
+
+security:
+  bcrypt:
+    strength: ${BCRYPT_STRENGTH:8}
 
 file:
   upload-dir: uploads/properties
