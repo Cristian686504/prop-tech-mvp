@@ -56,28 +56,28 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 ### 3.2 Criterios de aceptación a validar
 
 #### HU001 — Registro de Arrendador (3 CA)
-| CA | Escenario | Tipo de ejecución |
+| CA | Título | Tipo de ejecución |
 |----|-----------|:-----------------:|
 | CA001 | Registro exitoso del arrendador | Automatizada |
 | CA002 | Registro fallido por correo electrónico ya registrado | Automatizada |
 | CA003 | Registro fallido por datos inválidos | Automatizada |
 
 #### HU002 — Registro de Arrendatario (3 CA)
-| CA | Escenario | Tipo de ejecución |
+| CA | Título | Tipo de ejecución |
 |----|-----------|:-----------------:|
 | CA001 | Registro exitoso del arrendatario | Automatizada |
 | CA002 | Registro fallido por correo electrónico ya registrado | Automatizada |
 | CA003 | Registro fallido por datos inválidos | Automatizada |
 
 #### HU003 — Inicio de Sesión (3 CA)
-| CA | Escenario | Tipo de ejecución |
+| CA | Título | Tipo de ejecución |
 |----|-----------|:-----------------:|
 | CA001 | Inicio de sesión exitoso | Automatizada |
 | CA002 | Inicio de sesión con campos vacíos | Automatizada |
 | CA003 | Inicio de sesión con credenciales inválidas | Automatizada |
 
 #### HU004 — Publicar Propiedad (9 CA)
-| CA | Escenario | Tipo de ejecución |
+| CA | Título | Tipo de ejecución |
 |----|-----------|:-----------------:|
 | CA001 | Publicación exitosa de la propiedad | Automatizada |
 | CA002 | Publicación con campos vacíos | Automatizada |
@@ -90,20 +90,20 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | CA009 | Usuario con rol distinto a arrendador intenta crear publicación | Automatizada |
 
 #### HU005 — Visualizar Propiedades Disponibles (2 CA)
-| CA | Escenario | Tipo de ejecución |
+| CA | Título | Tipo de ejecución |
 |----|-----------|:-----------------:|
 | CA001 | Visualización de propiedades disponibles | Automatizada |
 | CA002 | Usuario no autenticado quiere ver propiedades | Automatizada |
 
 #### HU006 — Aplicar para Alquilar Propiedad (3 CA)
-| CA | Escenario | Tipo de ejecución |
+| CA | Título | Tipo de ejecución |
 |----|-----------|:-----------------:|
 | CA001 | Aplicación exitosa para alquilar propiedad | Automatizada |
 | CA002 | El usuario envía la solicitud a una propiedad no disponible | Automatizada |
 | CA003 | Un usuario no autenticado envía la solicitud a una propiedad | Automatizada |
 
 #### HU007 — Evaluar Perfil Financiero del Arrendatario (8 CA)
-| CA | Escenario | Tipo de ejecución |
+| CA | Título | Tipo de ejecución |
 |----|-----------|:-----------------:|
 | CA001 | Perfil financiero con riesgo bajo (Score ≥ 700, Ingreso ≥ 2x) | Automatizada |
 | CA002 | Perfil financiero con riesgo bajo (Score ≥ 500 y < 700, Ingreso ≥ 3x) | Automatizada |
@@ -115,7 +115,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | CA008 | Perfil financiero con riesgo alto (Score < 500, Ingreso < 3x) | Automatizada |
 
 #### HU008 — Cálculo Dinámico del Depósito de Garantía (3 CA)
-| CA | Escenario | Tipo de ejecución |
+| CA | Título | Tipo de ejecución |
 |----|-----------|:-----------------:|
 | CA001 | Cálculo de depósito de garantía para perfil de riesgo bajo (1 mes) | Automatizada |
 | CA002 | Cálculo de depósito de garantía para perfil de riesgo medio (2 meses) | Automatizada |
@@ -123,7 +123,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 
 
 #### HU010 — Gestionar Solicitudes de Alquiler (6 CA)
-| CA | Escenario | Tipo de ejecución |
+| CA | Título | Tipo de ejecución |
 |----|-----------|:-----------------:|
 | CA001 | Visualización de solicitudes con evaluación financiera | Automatizada |
 | CA002 | Aprobación de solicitud de alquiler | Automatizada |
@@ -155,9 +155,9 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | Tipo de prueba | Descripción | Herramienta | Responsable |
 |----------------|-------------|-------------|:-----------:|
 | **Funcional — API** | Validación exclusiva de contratos de API REST: request/response, códigos HTTP, estructura JSON y schemas | Karate DSL | QA |
-| **Funcional — E2E (BDD)** | Validación de flujos de negocio de extremo a extremo con escenarios Gherkin sobre criterios de aceptación | SerenityBDD + Cucumber | QA |
+| **Funcional — E2E** | Validación de flujos de negocio de extremo a extremo con escenarios Gherkin sobre criterios de aceptación | SerenityBDD + Cucumber | QA |
 | **Manual** | Validación de escenarios no automatizables | Postman / navegador | QA |
-| **Rendimiento** | Pruebas de carga y estrés sobre endpoints críticos | k6 | QA + DEV |
+| **Rendimiento** | Pruebas de carga sobre endpoints críticos | k6 | QA + DEV |
 | **Unitaria** | Pruebas de unidad con cobertura > 80% | JUnit 5 / Mockito | DEV |
 
 ### 4.2 Estrategia de ejecución
