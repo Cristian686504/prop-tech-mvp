@@ -156,144 +156,31 @@ De los 33 commits tipo `fix:` del proyecto, **21 ocurrieron entre el 1 y el 5 de
 
 ---
 
-## 5. ¿Cómo garantizó el QA la calidad del MVP entregado?
+## 5. ¿Cómo garantizó el QA la calidad del MVP entregado en un tiempo tan corto?
 
-### 5.1 Estrategia de pruebas ejecutada
+### 1. Definir el alcance del testing desde el inicio
 
-La estrategia de QA se ejecutó en **dos fases** a lo largo de los 10 días de desarrollo:
+- Identificar los flujos críticos del negocio (el "happy path" y los casos de fallo más probables).
+- Acordar con el equipo qué no se va a testear en esta iteración.
+- Usar una matriz de riesgo para priorizar: impacto alto + probabilidad alta = se testea primero.
 
-- **Fase 1 (paralela al desarrollo):** Pruebas unitarias y de integración sobre la lógica de negocio conforme se iban completando las HU. Foco en dominio y casos de uso.
-- **Fase 2 (estabilización):** Pruebas funcionales de API (Karate), pruebas E2E (SerenityBDD + Cucumber) y pruebas de rendimiento (k6). Se ejecutaron los 59 casos de prueba definidos en `TEST_CASES.md`.
+### 2. Testing basado en riesgo
 
-### 5.2 Pruebas unitarias y de integración (260 tests)
+En lugar de cobertura total, se concentra en:
 
-Se pasó de 141 tests iniciales (dominio + use cases) a **260 tests** cubriendo todas las capas de la arquitectura:
+- Funcionalidades core del MVP (las que definen el valor del producto).
+- Flujos que el usuario final va a ejecutar el día 1.
 
-#### Dominio — Model (3 archivos, 72 tests)
-| Archivo de Test | Tests |
-|----------------|:-----:|
-| `UserTest.java` | 38 |
-| `PropertyTest.java` | 22 |
-| `ApplicationTest.java` | 12 |
+### 3. Shift-left: QA entra temprano
 
-#### Dominio — Use Cases (11 archivos, 127 tests)
-| Archivo de Test | Tests |
-|----------------|:-----:|
-| `EvaluateFinancialRiskUseCaseTest.java` | 19 |
-| `LoginUserUseCaseTest.java` | 19 |
-| `GetUserByIdUseCaseTest.java` | 18 |
-| `ApplyForPropertyUseCaseTest.java` | 17 |
-| `GetPropertyApplicationsUseCaseTest.java` | 11 |
-| `GetPropertiesUseCaseTest.java` | 10 |
-| `PublishPropertyUseCaseTest.java` | 9 |
-| `CalculateSecurityDepositUseCaseTest.java` | 8 |
-| `GetTenantApplicationsUseCaseTest.java` | 8 |
-| `GetPropertyByIdUseCaseTest.java` | 7 |
-| `RegisterUserUseCaseTest.java` | 6 |
+- Revisar criterios de aceptación antes de que el DEV empiece a codear.
+- Participar en el refinamiento de historias de usuario para detectar ambigüedades.
+- Esto evita retrabajo al final del sprint.
 
-#### Infraestructura (2 archivos, 17 tests)
-| Archivo de Test | Tests |
-|----------------|:-----:|
-| `GlobalExceptionHandlerTest.java` | 10 |
-| `PropertyRepositoryAdapterTest.java` | 7 |
+### 4. Automatización estratégica
 
-#### Integración — App Service (7 archivos, 44 tests)
-| Archivo de Test | Tests | Tipo |
-|----------------|:-----:|:----:|
-| `PropertyControllerPaginationIntegrationTest.java` | 11 | `@SpringBootTest` + H2 |
-| `AuthControllerRegisterIntegrationTest.java` | 10 | `@SpringBootTest` + H2 |
-| `PropertyControllerPriceValidationTest.java` | 9 | `@SpringBootTest` + H2 |
-| `ArchitectureTest.java` | 5 | ArchUnit |
-| Otros tests de configuración e infraestructura | 9 | — |
-
-| | **Total: 260 tests** |
-
-### 5.3 Cobertura JaCoCo
-
-**Módulo Model (dominio):**
-
-| Métrica | Cobertura |
-|---------|:---------:|
-| Instrucciones | 90.75% |
-| Ramas | 100.00% |
-| Líneas | 91.11% |
-| Complejidad | 95.45% |
-| Métodos | 85.71% |
-| Clases | 85.71% |
-
-**Módulo UseCase (casos de uso):**
-
-| Métrica | Cobertura |
-|---------|:---------:|
-| Instrucciones | 100.00% |
-| Ramas | 97.96% |
-| Líneas | 100.00% |
-| Complejidad | 97.92% |
-| Métodos | 100.00% |
-| Clases | 100.00% |
-
-### 5.4 Mutation Testing (Pitest)
-
-| Módulo | Mutaciones Generadas | Mutaciones Eliminadas | Score |
-|--------|:--------------------:|:---------------------:|:-----:|
-| Model | 19 | 18 | 79% |
-| UseCase | — | — | 82% |
-
-El mutation testing garantiza que los tests no solo ejecutan las líneas sino que realmente **detectan cambios** en el comportamiento del código.
-
-### 5.5 Pruebas funcionales de API — Karate DSL
-
-Se implementaron escenarios de pruebas funcionales sobre los endpoints REST utilizando **Karate DSL 1.5.2**. Los escenarios cubrieron:
-
-- `POST /api/auth/register` — registro exitoso, correo duplicado, datos inválidos
-- `POST /api/auth/login` — credenciales válidas e inválidas
-- `POST /api/properties` — publicación con y sin autenticación, validaciones de campos
-- `GET /api/properties` — listado paginado, filtros
-- `POST /api/applications` — aplicación a propiedad, evaluación financiera automática
-- `PUT /api/applications/{id}` — aprobar/rechazar solicitudes, validación de permisos
-
-### 5.6 Pruebas E2E — SerenityBDD + Cucumber
-
-Se automatizaron los flujos end-to-end de los criterios de aceptación con **SerenityBDD 4.0.1 + Cucumber**, cubriendo los escenarios Gherkin definidos en `TEST_CASES.md`:
-
-- Flujo completo de registro → login → publicar propiedad → aplicar → evaluar riesgo → aprobar/rechazar
-- Validaciones de formularios (boundary testing en campos de nombre, correo, teléfono, precio)
-- Verificación de dashboards diferenciados por rol (arrendador vs arrendatario)
-
-### 5.7 Pruebas de rendimiento — k6
-
-Se ejecutaron scripts de carga con **k6** sobre los endpoints críticos:
-
-| Endpoint | VUs | Duración | p95 Objetivo |
-|----------|:---:|:--------:|:------------:|
-| `POST /api/auth/register` | 100 | 60s | < 2s |
-| `POST /api/auth/login` | 100 | 60s | < 2s |
-| `GET /api/properties` | 100 | 60s | < 1s |
-
-### 5.8 Casos de prueba ejecutados
-
-Los **59 casos de prueba** definidos en `TEST_CASES.md` fueron ejecutados en su totalidad, cubriendo:
-
-| HU | Casos de Prueba | Descripción |
-|----|:---------------:|-------------|
-| HU001 | TC-001 a TC-018 | Registro de arrendador: happy path, correo duplicado, validaciones de campos, boundary testing, rendimiento |
-| HU002 | TC-019 a TC-020 | Registro de arrendatario: happy path, correo duplicado |
-| HU003 | TC-021 a TC-027 | Login: credenciales válidas/inválidas, token JWT, campos vacíos, rendimiento |
-| HU004 | TC-028 a TC-042 | Publicar propiedad: validaciones extensas, imágenes, autenticación, autorización |
-| HU005 | TC-057 a TC-059 | Visualización de propiedades: listado, autenticación requerida, rendimiento |
-| HU006 | TC-043 a TC-046 | Aplicar a propiedad: happy path, duplicados, autenticación |
-| HU007 | TC-047 a TC-051 | Evaluación financiera: todas las combinaciones score/ingresos |
-| HU008 | TC-052 a TC-053 | Cálculo de depósito: derivado del riesgo evaluado |
-| HU010 | TC-054 a TC-056 | Gestión de solicitudes: aprobar, rechazar, validación de permisos |
-
-### 5.9 Técnicas de QA aplicadas
-
-1. **Foco en lógica de negocio crítica:** Cobertura prioritaria del algoritmo de evaluación financiera (`EvaluateFinancialRiskUseCase` — 19 tests con todas las combinaciones de score/ingresos de la tabla de negocio).
-2. **Tests parametrizados:** `@ParameterizedTest` con `@NullSource`, `@ValueSource` y `@NullAndEmptySource` para cubrir múltiples escenarios con menos código.
-3. **Boundary testing:** Valores frontera exactos del algoritmo de riesgo (score = 500, 699, 700; ratio de ingresos = 2x, 3x).
-4. **Verificación de interacciones:** `Mockito.verify()` y `ArgumentCaptor` para confirmar interacciones correctas con repositorios.
-5. **Tests de integración con H2:** Validación end-to-end de la capa HTTP con `@SpringBootTest`, base de datos en memoria y Spring Security configurado.
-6. **Pruebas multi-nivel:** Unitarias → Integración → API funcional (Karate) → E2E (SerenityBDD) → Rendimiento (k6).
+- Automatizar primero los smoke tests y regresión básica (los más repetitivos).
+- Usar herramientas como SerenityBDD para E2E, Karate para API y k6 para rendimiento.
 
 ---
 

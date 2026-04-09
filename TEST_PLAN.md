@@ -10,7 +10,7 @@
 | **Sistema bajo prueba** | Plataforma de Arrendamiento Inteligente |
 | **Versión** | 1.0.0-MVP |
 | **Fecha** | 24 de marzo de 2026 |
-| **Ciclo de pruebas** | Sprint 1 y Sprint 2 — HU001 a HU010 |
+| **Ciclo de pruebas** | Sprint 1, Sprint 2 y Sprint 3 — HU001 a HU010 |
 | **Equipo** | Cristian Renz y Cristian Davila |
 
 ---
@@ -45,7 +45,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | EP01 — Gestión de Usuarios | HU002 | Registro de Arrendatario | 3 | Alta |
 | EP01 — Gestión de Usuarios | HU003 | Inicio de Sesión | 5 | Alta |
 | EP02 — Gestión de Propiedades | HU004 | Publicar Propiedad | 5 | Alta |
-| EP02 — Gestión de Propiedades | HU005 | Visualizar Propiedades Disponibles | 2 | Media |
+| EP02 — Gestión de Propiedades | HU005 | Visualizar Propiedades Disponibles | 2 | Alta |
 | EP02 — Gestión de Propiedades | HU006 | Aplicar para Alquilar Propiedad | 3 | Alta |
 | EP03 — Evaluación Financiera y Contratación | HU007 | Evaluar Perfil Financiero del Arrendatario | 2 | Alta |
 | EP03 — Evaluación Financiera y Contratación | HU008 | Cálculo Dinámico del Depósito de Garantía | 2 | Alta |
@@ -144,7 +144,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | — | Soporte a clientes | Fuera del alcance del MVP |
 | — | Filtro de propiedades | Fuera del alcance del MVP |
 | — | Pruebas de seguridad (inyección SQL, XSS, manipulación JWT, hashing de contraseñas) | Se abordarán en un ciclo dedicado de seguridad |
-| HU009  | Generación de Contrato de Arrendamiento | Se tiene desconocimiento de la parte legal del contrato |
+| HU009  | Generación de Contrato de Arrendamiento | Fuera del alcance del MVP |
 
 ---
 
@@ -219,7 +219,7 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | **Backend** | API REST desplegada en contenedor Docker |
 | **URL base API** | localhost:8080 |
 | **Autenticación** | JWT (JSON Web Token) |
-| **CI/CD** | GitHub Actions — ejecución automática de suites de prueba en cada PR |
+| **CI/CD** | GitHub Actions — ejecución automática de pruebas unitarias |
 
 ### 6.2 Datos del entorno
 
@@ -235,12 +235,12 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 
 | Herramienta | Versión | Propósito |
 |-------------|---------|-----------|
-| **SerenityBDD + Cucumber** | 4.0.1 | Pruebas funcionales E2E — flujos de negocio de extremo a extremo con escenarios Gherkin y reportes detallados |
-| **Karate DSL** | 1.5.2 | Pruebas exclusivas de API REST — validación de contratos de API: códigos HTTP, estructura JSON y schemas |
-| **k6** | 1.6.1 | Pruebas de rendimiento — carga, estrés y umbrales de latencia |
-| **JUnit 5 / Mockito** | 5.13.4 / 5.23.0 | Pruebas unitarias (responsabilidad DEV) |
+| **SerenityBDD + Cucumber** | 5.3.3 / 7.34.2 | Pruebas funcionales E2E — flujos de negocio de extremo a extremo con escenarios Gherkin y reportes detallados |
+| **Karate DSL** | 1.5.1 | Pruebas exclusivas de API REST — validación de contratos de API: códigos HTTP, estructura JSON y schemas |
+| **k6** | 1.7.0 | Pruebas de rendimiento — carga, estrés y umbrales de latencia |
+| **JUnit 5 / Mockito** | 5.10.2 / 5.7.0 | Pruebas unitarias (responsabilidad DEV) |
 | **GitHub Issues** | — | Bug Tracker — registro y seguimiento de defectos |
-| **GitHub Actions** | — | CI/CD — ejecución automática de suites de prueba |
+| **GitHub Actions** | — | CI/CD — ejecución automática de pruebas unitarias |
 | **Postman** | 12.3.0 | Exploración y pruebas manuales |
 | **IntelliJ IDEA / VS Code** | 2025.3.4 / 1.112 | IDE para desarrollo y ejecución de scripts de prueba |
 | **Jacoco** | 0.8.14 | Comprobación de coverage |
@@ -289,11 +289,16 @@ PropTech es una plataforma de arrendamiento inteligente dirigida a propietarios 
 | Sprint | Actividad | Duración estimada |
 |------|-----------|:-----------------:|
 | Micro-Sprint 1 | Diseño del plan de pruebas | 2 días |
-| Micro-Sprint 2 | Diseño de casos de prueba (todas las HU) | 2 días |
-| Micro-Sprint 3 | Automatización HU001-HU010 (Karate + Cucumber) | 2 días |
-| Micro-Sprint 3 | Pruebas de rendimiento k6 | 0.5 días |
-| Micro-Sprint 3 | Regresión + reporte final | 0.5 días |
-| **TOTAL** | | **7 días** |
+| Micro-Sprint 2 | Diseño de casos de prueba (HU001-HU005) | 2 días |
+| Micro-Sprint 3 | Automatización HU001-HU005 (k6) | 1 día |
+| Micro-Sprint 3 | Automatización HU001-HU005 (Karate) | 1 día |
+| Micro-Sprint 4 | Automatización HU001-HU005 (Serenity BDD) | 1 día |
+| Micro-Sprint 5 | Diseño de casos de prueba (HU006-HU010) | 2 días |
+| Micro-Sprint 6 | Automatización HU006-HU010 (Karate) | 1 día |
+| Micro-Sprint 6 | Automatización HU006-HU010 (Serenity BDD) | 1 día |
+| Micro-Sprint 7 | Automatización HU006-HU010 (k6) | 1 día |
+| Micro-Sprint 7 | Regresión + reporte final | 0.5 días |
+| **TOTAL** | | **12.5 días** |
 
 ---
 
