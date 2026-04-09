@@ -586,6 +586,7 @@ function PropertyList() {
                     property={property}
                     userRole={user?.role}
                     onApply={handleApply}
+                    alreadyApplied={applications.some(app => app.propertyId === property.id)}
                   />
                 ))}
               </div>

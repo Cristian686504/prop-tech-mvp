@@ -2,7 +2,7 @@
 import React from 'react';
 import './PropertyCard.css';
 
-function PropertyCard({ property, userRole, onApply }) {
+function PropertyCard({ property, userRole, onApply, alreadyApplied }) {
   const formatPrice = (price) => {
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',
@@ -80,10 +80,11 @@ function PropertyCard({ property, userRole, onApply }) {
           {isTenant && isAvailable && (
             <button
               id={`property-card-btn-apply-${property.id}`}
-              className="property-button-apply"
-              onClick={() => onApply(property.id)}
+              className={`property-button-apply${alreadyApplied ? ' property-button-applied' : ''}`}
+              onClick={() => !alreadyApplied && onApply(property.id)}
+              disabled={alreadyApplied}
             >
-              Solicitar Arriendo
+              {alreadyApplied ? 'Solicitado ✓' : 'Solicitar Arriendo'}
             </button>
           )}
         </div>

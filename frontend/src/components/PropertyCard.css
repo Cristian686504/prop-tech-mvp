@@ -149,14 +149,20 @@
   transition: all 0.2s;
 }
 
-.property-button-apply:hover {
+.property-button-apply:hover:not(:disabled) {
   background: #1d4ed8;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
-.property-button-apply:active {
+.property-button-apply:active:not(:disabled) {
   transform: translateY(0);
+}
+
+.property-button-applied {
+  background: #16a34a;
+  cursor: default;
+  opacity: 0.85;
 }
 
 @media (max-width: 768px) {
